@@ -3,6 +3,32 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+input CreatePostInputType {
+  text: String!
+  title: String!
+}
+
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
+type Mutation {
+  createPost(data: CreatePostInputType!): Post
+  deletePost(id: String!): Boolean!
+  updatePost(data: CreatePostInputType!, id: String!): Boolean
+}
+
+type Post {
+  createdAt: DateTime!
+  id: String!
+  text: String!
+  title: String!
+  updatedAt: DateTime!
+}
+
 type Query {
   hello: String!
+  post(id: String!): Post
+  posts: [Post!]!
 }
