@@ -1,14 +1,28 @@
 import User from '../../database/entity/User'
-import { Arg, Mutation, Query, Resolver } from 'type-graphql'
+import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import UserInputType from './types/UserInputType'
 import UserResponse from '../../database/schema/response/UserResponse'
 import argon2 from 'argon2'
+import Context from 'src/app/server/context'
 
 @Resolver()
 export default class AuthResolver {
+	@Query(() => User, { nullable: true })
+	async me(@Ctx() { req }: Context): Promise<UserResponse> {
+		if (!req.session.userId)
+			return {
+				errors: [{ field: 'user', message: 'You are currently not logged in' }]
+			}
+		const user = await User.findOne({ id: req.session.userId })
+		return {
+			user
+		}
+	}
+
 	@Mutation(() => UserResponse)
 	async register(
-		@Arg('data') registerUserData: UserInputType
+		@Arg('data') registerUserData: UserInputType,
+		@Ctx() { req }: Context
 	): Promise<UserResponse> {
 		let userRes
 		try {
@@ -16,10 +30,7 @@ export default class AuthResolver {
 			const user = await User.create({ name, password })
 			userRes = await user.save()
 		} catch (e) {
-			console.log(e.code)
-
 			if (e.code === '23505') {
-				console.log('Hello')
 				return {
 					errors: [
 						{
@@ -31,13 +42,14 @@ export default class AuthResolver {
 			}
 		}
 
-		console.log('why')
+		req.session.userId = userRes?.id
 		return { user: userRes }
 	}
 
 	@Query(() => UserResponse)
 	async login(
-		@Arg('data') loginUserData: UserInputType
+		@Arg('data') loginUserData: UserInputType,
+		@Ctx() { req }: Context
 	): Promise<UserResponse> {
 		const { name, password } = loginUserData
 		const user = await User.findOne({ where: { name } })
@@ -65,6 +77,7 @@ export default class AuthResolver {
 			}
 		}
 
+		req.session!.userId = user?.id
 		return {
 			user
 		}

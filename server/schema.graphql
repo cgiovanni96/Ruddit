@@ -36,6 +36,7 @@ type Post {
 type Query {
   hello: String!
   login(data: UserInputType!): UserResponse!
+  me: User
   post(id: String!): Post
   posts: [Post!]!
 }
