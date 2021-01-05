@@ -1,16 +1,41 @@
 {
-  "name": "server",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/node": "^14.14.20",
-    "typescript": "^4.1.3"
-  }
+	"name": "ruddit-server",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"build": "tsc",
+		"node": "node dist/index.js",
+		"start": "ts-node-dev src/index.ts"
+	},
+	"keywords": [],
+	"author": "Giovanni Costa",
+	"license": "ISC",
+	"devDependencies": {
+		"@types/node": "^14.14.20",
+		"eslint": "^7.17.0",
+		"eslint-config-prettier": "^6.15.0",
+		"eslint-config-standard-with-typescript": "^19.0.1",
+		"eslint-plugin-import": "2",
+		"eslint-plugin-node": "11",
+		"eslint-plugin-prettier": "^3.1.4",
+		"eslint-plugin-promise": "4",
+		"eslint-plugin-standard": "4",
+		"nodemon": "^2.0.6",
+		"prettier": "^2.1.2",
+		"ts-node-dev": "^1.1.1",
+		"typescript": "^4.1.3"
+	},
+	"dependencies": {
+		"apollo-server-express": "^2.19.1",
+		"class-validator": "^0.12.2",
+		"cors": "^2.8.5",
+		"dotenv": "^8.2.0",
+		"express": "^4.17.1",
+		"graphql": "^15.4.0",
+		"pg": "^8.5.1",
+		"reflect-metadata": "^0.1.13",
+		"type-graphql": "^1.1.1",
+		"typeorm": "^0.2.29"
+	}
 }
