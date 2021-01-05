@@ -8,7 +8,7 @@ export default async (emitSchema = false): Promise<GraphQLSchema> => {
 
 	return await buildSchema({
 		resolvers,
-		emitSchemaFile,
-		validate: true
+		emitSchemaFile
+		// validate: true
 	})
 }
