@@ -3,14 +3,18 @@ import { ChakraProvider, theme } from "@chakra-ui/react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Index from "./pages/index/Index";
 import Register from "./pages/register/Register";
+import Navbar from "./components/Navbar";
 
 const Root = () => (
   <ChakraProvider theme={theme}>
     <Router>
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
+      <>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </>
     </Router>
   </ChakraProvider>
 );
