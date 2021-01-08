@@ -22,6 +22,7 @@ type Mutation {
   createPost(data: CreatePostInputType!): Post
   deletePost(id: String!): Boolean!
   login(data: UserInputType!): UserResponse!
+  logout: Boolean!
   register(data: UserInputType!): UserResponse!
   updatePost(data: CreatePostInputType!, id: String!): Boolean
 }

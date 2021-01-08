@@ -1,12 +1,5 @@
 mutation Login($data: UserInputType!) {
 	login(data: $data) {
-		errors {
-			field
-			message
-		}
-		user {
-			id
-			name
-		}
+		...UserResponseFields
 	}
 }

@@ -104,45 +104,70 @@ export type UserInputType = {
   password: Scalars['String'];
 };
 
+export type UserFieldsFragment = { __typename?: 'User', id: string, name: string };
+
+export type UserResponseFieldsFragment = { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<(
+    { __typename?: 'User' }
+    & UserFieldsFragment
+  )> };
+
 export type LoginMutationVariables = Exact<{
   data: UserInputType;
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, name: string }> } };
+export type LoginMutation = { __typename?: 'Mutation', login: (
+    { __typename?: 'UserResponse' }
+    & UserResponseFieldsFragment
+  ) };
 
 export type RegisterMutationVariables = Exact<{
   data: UserInputType;
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, name: string }> } };
+export type RegisterMutation = { __typename?: 'Mutation', register: (
+    { __typename?: 'UserResponse' }
+    & UserResponseFieldsFragment
+  ) };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, name: string }> }> };
+export type MeQuery = { __typename?: 'Query', me?: Maybe<(
+    { __typename?: 'UserResponse' }
+    & UserResponseFieldsFragment
+  )> };
 
 export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetPostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', title: string, text: string }> };
 
-
+export const UserFieldsFragmentDoc = gql`
+    fragment UserFields on User {
+  id
+  name
+}
+    `;
+export const UserResponseFieldsFragmentDoc = gql`
+    fragment UserResponseFields on UserResponse {
+  errors {
+    field
+    message
+  }
+  user {
+    ...UserFields
+  }
+}
+    ${UserFieldsFragmentDoc}`;
 export const LoginDocument = gql`
     mutation Login($data: UserInputType!) {
   login(data: $data) {
-    errors {
-      field
-      message
-    }
-    user {
-      id
-      name
-    }
+    ...UserResponseFields
   }
 }
-    `;
+    ${UserResponseFieldsFragmentDoc}`;
 export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
 
 /**
@@ -171,17 +196,10 @@ export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, Log
 export const RegisterDocument = gql`
     mutation Register($data: UserInputType!) {
   register(data: $data) {
-    errors {
-      field
-      message
-    }
-    user {
-      id
-      name
-    }
+    ...UserResponseFields
   }
 }
-    `;
+    ${UserResponseFieldsFragmentDoc}`;
 export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, RegisterMutationVariables>;
 
 /**
@@ -210,17 +228,10 @@ export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutatio
 export const MeDocument = gql`
     query Me {
   me {
-    errors {
-      field
-      message
-    }
-    user {
-      id
-      name
-    }
+    ...UserResponseFields
   }
 }
-    `;
+    ${UserResponseFieldsFragmentDoc}`;
 
 /**
  * __useMeQuery__

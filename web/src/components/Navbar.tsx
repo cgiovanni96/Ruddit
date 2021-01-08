@@ -13,7 +13,7 @@ const Navbar: React.FC = ({}) => {
 		return <div>Loading</div>
 	} else if (error) {
 		return <div>Error</div>
-	} else if (!data) {
+	} else if (!data?.me?.user) {
 		rightMenu = (
 			<>
 				<RouterLink href="/login">

@@ -1,12 +1,5 @@
 mutation Register($data: UserInputType!) {
 	register(data: $data) {
-		errors {
-			field
-			message
-		}
-		user {
-			id
-			name
-		}
+		...UserResponseFields
 	}
 }

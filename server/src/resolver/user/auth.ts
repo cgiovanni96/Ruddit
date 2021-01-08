@@ -70,4 +70,19 @@ export default class AuthResolver {
 			user
 		}
 	}
+
+	@Mutation(() => Boolean)
+	async logout(@Ctx() { req, res }: Context): Promise<boolean> {
+		return new Promise((resolve) =>
+			req.session.destroy((err) => {
+				if (err) {
+					console.error(err)
+					resolve(false)
+					return
+				}
+				res.clearCookie('sid')
+				resolve(true)
+			})
+		)
+	}
 }
