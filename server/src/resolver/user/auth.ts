@@ -1,9 +1,11 @@
-import User from '../../database/entity/User'
-import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql'
-import UserInputType from './types/UserInputType'
-import UserResponse from '../../database/schema/response/UserResponse'
 import argon2 from 'argon2'
-import Context from 'src/app/server/context'
+import { isEmail } from 'class-validator'
+import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql'
+import { v4 } from 'uuid'
+import Context from '../../app/server/context'
+import { sendEmail } from '../../app/util/email'
+import User from '../../database/entity/User'
+import UserResponse from '../../database/schema/response/UserResponse'
 import {
 	EmailNotValidError,
 	IncorrectPasswordError,
@@ -11,8 +13,8 @@ import {
 	PasswordLengthError,
 	UserAlreadyExistsError
 } from './errors'
-import { isEmail } from 'class-validator'
 import LoginInputType from './types/LoginInputType'
+import UserInputType from './types/UserInputType'
 
 @Resolver()
 export default class AuthResolver {
@@ -88,8 +90,24 @@ export default class AuthResolver {
 		)
 	}
 
-	// @Mutation(Boolean)
-	// async forgotPassword(@Ctx() { req }: Context): Promise<boolean> {
-	// 	const user = await User.findOne({ id: req.session.userId })
-	// }
+	@Mutation(() => Boolean)
+	async forgotPassword(
+		@Arg('email') email: string,
+		@Ctx() { redis }: Context
+	): Promise<boolean> {
+		if (!isEmail(email)) return true
+		const user = await User.findOne({ email })
+		if (!user) {
+			return true
+		}
+
+		const token = v4()
+
+		const forgotPasswordHtml = `<a href="http://localhost:3000/change-password/${token}">Reset Password</a>`
+
+		redis.set('forget-password:' + token, user.id, 'ex', 1000 * 60 * 60 * 12) // 12 hours
+
+		sendEmail(user.email, 'Password Reset', forgotPasswordHtml)
+		return true
+	}
 }

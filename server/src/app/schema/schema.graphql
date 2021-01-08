@@ -27,6 +27,7 @@ input LoginInputType {
 type Mutation {
   createPost(data: CreatePostInputType!): Post
   deletePost(id: String!): Boolean!
+  forgotPassword(email: String!): Boolean!
   login(data: LoginInputType!): UserResponse!
   logout: Boolean!
   register(data: UserInputType!): UserResponse!

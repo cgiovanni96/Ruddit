@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-import EMAIL_ACCOUNT from 'src/constants/email'
+import EMAIL_ACCOUNT from '../../constants/email'
 
 //https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
 export const isEmail = (email: string): boolean => {
@@ -8,7 +8,7 @@ export const isEmail = (email: string): boolean => {
 }
 
 // async..await is not allowed in global scope, must use a wrapper
-const email = async (to: string, subject: string, html: string) => {
+export const sendEmail = async (to: string, subject: string, html: string) => {
 	// let testAccount = await nodemailer.createTestAccount()
 
 	let transporter = nodemailer.createTransport({
@@ -32,5 +32,3 @@ const email = async (to: string, subject: string, html: string) => {
 
 	console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info))
 }
-
-export default email

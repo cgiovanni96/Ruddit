@@ -26,7 +26,7 @@ export default class User extends BaseEntity {
 
 	@Column()
 	@Field()
-	email?: string
+	email: string
 
 	@CreateDateColumn()
 	@Field()

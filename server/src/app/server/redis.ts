@@ -4,7 +4,7 @@ import Redis from 'ioredis'
 export const RedisStore = connectRedis(session)
 import { PROD } from '../../constants/server'
 
-export const client = new Redis()
+export const redis = new Redis()
 
 export const cookieAge = (): number => {
 	return 1000 * 60 * 60 * 24 * 365 * 5 // 5 years
@@ -12,7 +12,7 @@ export const cookieAge = (): number => {
 
 const rudditSession = session({
 	name: 'sid',
-	store: new RedisStore({ client, disableTouch: true }),
+	store: new RedisStore({ client: redis, disableTouch: true }),
 	cookie: {
 		maxAge: cookieAge(),
 		httpOnly: true,

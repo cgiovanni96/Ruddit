@@ -3,7 +3,7 @@ import { ApolloServer } from 'apollo-server-express'
 import express from 'express'
 import cors from 'cors'
 
-import session from './redis'
+import session, { redis } from './redis'
 import build from '../schema/build'
 import Context from './context'
 
@@ -21,7 +21,7 @@ export default async (emitSchema: boolean = false, PORT: string) => {
 
 	const server = new ApolloServer({
 		schema: await build(emitSchema),
-		context: ({ req, res }): Context => ({ req, res })
+		context: ({ req, res }): Context => ({ req, res, redis })
 	})
 
 	server.applyMiddleware({ app, cors: false })
