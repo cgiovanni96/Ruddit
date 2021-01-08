@@ -43,13 +43,19 @@ const Login: React.FC = ({}) => {
 					{({ values, handleChange, isSubmitting }) => (
 						<Form>
 							<Flex>
-								<Field name="name" placeholder="Username" label="Username" />
+								<Field
+									name="name"
+									placeholder="Username"
+									label="Username"
+									disabled={values.email ? true : false}
+								/>
 								<Spacer mr={6} />
 								<Field
 									name="email"
 									type="email"
 									placeholder="Email"
 									label="Email"
+									disabled={values.name ? true : false}
 								/>
 							</Flex>
 							<Spacer mt={6} />
