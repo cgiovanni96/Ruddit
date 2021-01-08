@@ -4,12 +4,12 @@ import RouterLink from 'next/link'
 
 import { useMeQuery, useLogoutMutation } from '../generated/graphql'
 import { useApolloClient } from '@apollo/client'
-import isServer from '../lib/util/isServer'
+// import isServer from '../lib/util/isServer'
 // interface NavbarProps {}
 
 const Navbar: React.FC = ({}) => {
 	const { error, loading, data } = useMeQuery({
-		skip: isServer()
+		// skip: isServer()
 	})
 	const [logout] = useLogoutMutation()
 	const apolloClient = useApolloClient()
@@ -20,7 +20,7 @@ const Navbar: React.FC = ({}) => {
 		return <div>Loading</div>
 	} else if (error) {
 		return <div>Error</div>
-	} else if (!data?.me?.user) {
+	} else if (!data?.me) {
 		rightMenu = (
 			<>
 				<RouterLink href="/login">
@@ -44,9 +44,10 @@ const Navbar: React.FC = ({}) => {
 			</>
 		)
 	} else {
+		console.log('Data: ', data)
 		rightMenu = (
 			<>
-				<Text>{data.me?.user?.name}</Text>
+				<Text>{data.me?.name}</Text>
 				<Button
 					ml={4}
 					p={2}

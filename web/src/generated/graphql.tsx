@@ -21,7 +21,7 @@ export type Query = {
   posts: Array<Post>;
   post?: Maybe<Post>;
   hello: Scalars['String'];
-  me?: Maybe<UserResponse>;
+  me?: Maybe<User>;
 };
 
 
@@ -38,18 +38,6 @@ export type Post = {
   updatedAt: Scalars['DateTime'];
 };
 
-
-export type UserResponse = {
-  __typename?: 'UserResponse';
-  errors?: Maybe<Array<FieldError>>;
-  user?: Maybe<User>;
-};
-
-export type FieldError = {
-  __typename?: 'FieldError';
-  field: Scalars['String'];
-  message: Scalars['String'];
-};
 
 export type User = {
   __typename?: 'User';
@@ -100,6 +88,18 @@ export type CreatePostInputType = {
   text: Scalars['String'];
 };
 
+export type UserResponse = {
+  __typename?: 'UserResponse';
+  errors?: Maybe<Array<FieldError>>;
+  user?: Maybe<User>;
+};
+
+export type FieldError = {
+  __typename?: 'FieldError';
+  field: Scalars['String'];
+  message: Scalars['String'];
+};
+
 export type UserInputType = {
   name: Scalars['String'];
   password: Scalars['String'];
@@ -141,8 +141,8 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MeQuery = { __typename?: 'Query', me?: Maybe<(
-    { __typename?: 'UserResponse' }
-    & UserResponseFieldsFragment
+    { __typename?: 'User' }
+    & UserFieldsFragment
   )> };
 
 export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -263,10 +263,10 @@ export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutatio
 export const MeDocument = gql`
     query Me {
   me {
-    ...UserResponseFields
+    ...UserFields
   }
 }
-    ${UserResponseFieldsFragmentDoc}`;
+    ${UserFieldsFragmentDoc}`;
 
 /**
  * __useMeQuery__

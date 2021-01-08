@@ -37,7 +37,7 @@ type Post {
 
 type Query {
   hello: String!
-  me: UserResponse
+  me: User
   post(id: String!): Post
   posts: [Post!]!
 }

@@ -10,8 +10,6 @@ const Index: React.FC = () => {
 		return <div>Something happened</div>
 	}
 
-	console.log(data)
-
 	return (
 		<Box>
 			<Navbar />

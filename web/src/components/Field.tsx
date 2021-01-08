@@ -14,7 +14,6 @@ type FieldProps = InputHTMLAttributes<HTMLInputElement> & {
 
 const Field: React.FC<FieldProps> = ({ label, size, ...props }) => {
 	const [field, { error }] = useField(props)
-	console.log('error', error)
 	return (
 		<FormControl isInvalid={!!error}>
 			<FormLabel htmlFor={field.name}>{label}</FormLabel>
