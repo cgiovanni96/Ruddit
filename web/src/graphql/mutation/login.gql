@@ -1,4 +1,4 @@
-mutation Login($data: UserInputType!) {
+mutation Login($data: LoginInputType!) {
 	login(data: $data) {
 		...UserResponseFields
 	}

@@ -44,7 +44,6 @@ const Navbar: React.FC = ({}) => {
 			</>
 		)
 	} else {
-		console.log('Data: ', data)
 		rightMenu = (
 			<>
 				<Text>{data.me?.name}</Text>

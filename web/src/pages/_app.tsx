@@ -12,7 +12,7 @@ function MyApp({ Component, pageProps }: any): JSX.Element {
 			<ColorModeProvider
 				options={{
 					useSystemColorMode: false,
-					initialColorMode: 'light'
+					initialColorMode: 'dark'
 				}}
 			>
 				<Component {...pageProps} />

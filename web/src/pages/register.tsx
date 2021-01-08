@@ -17,7 +17,7 @@ const Register: React.FC = ({}) => {
 	return (
 		<Container variant="small">
 			<Formik
-				initialValues={{ name: '', password: '' }}
+				initialValues={{ name: '', password: '', email: '' }}
 				onSubmit={async (values, { setErrors }) => {
 					console.log(values)
 					const response = await register({
@@ -27,9 +27,7 @@ const Register: React.FC = ({}) => {
 								query: MeDocument,
 								data: {
 									__typename: 'Query',
-									me: {
-										user: data?.register.user
-									}
+									me: data?.register.user
 								}
 							})
 						}
@@ -44,6 +42,13 @@ const Register: React.FC = ({}) => {
 				{({ values, handleChange, isSubmitting }) => (
 					<Form>
 						<Field name="name" placeholder="Username" label="Username" />
+						<Spacer mt={6} />
+						<Field
+							name="email"
+							type="email"
+							placeholder="email"
+							label="Email"
+						/>
 						<Spacer mt={6} />
 						<Field
 							name="password"
