@@ -52,7 +52,7 @@ const Login: React.FC = ({}) => {
 							label="Password"
 						/>
 						<Button type="submit" mt={6} bgColor="red.500">
-							Register
+							Login
 						</Button>
 					</Form>
 				)}

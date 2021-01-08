@@ -2,11 +2,15 @@ import React from 'react'
 import { Button, Flex, Heading, Link, Spacer, Text } from '@chakra-ui/react'
 import RouterLink from 'next/link'
 
-import { useMeQuery } from '../generated/graphql'
+import { useMeQuery, useLogoutMutation } from '../generated/graphql'
+import { useApolloClient } from '@apollo/client'
 // interface NavbarProps {}
 
 const Navbar: React.FC = ({}) => {
 	const { error, loading, data } = useMeQuery()
+	const [logout] = useLogoutMutation()
+	const apolloClient = useApolloClient()
+
 	let rightMenu
 
 	if (loading) {
@@ -40,7 +44,16 @@ const Navbar: React.FC = ({}) => {
 		rightMenu = (
 			<>
 				<Text>{data.me?.user?.name}</Text>
-				<Button ml={4} p={2} variant={'link'} bgColor={'red.400'}>
+				<Button
+					ml={4}
+					p={2}
+					variant={'link'}
+					bgColor={'red.400'}
+					onClick={() => {
+						logout()
+						apolloClient.resetStore()
+					}}
+				>
 					Logout
 				</Button>
 			</>
