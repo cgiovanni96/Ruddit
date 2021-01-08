@@ -13,13 +13,15 @@ import {
 
 @Resolver()
 export default class AuthResolver {
-	@Query(() => User, { nullable: true })
+	@Query(() => UserResponse, { nullable: true })
 	async me(@Ctx() { req }: Context): Promise<UserResponse> {
+		console.log('Session: ', req.session)
 		if (!req.session.userId)
 			return {
 				errors: [{ field: 'user', message: 'You are currently not logged in' }]
 			}
 		const user = await User.findOne({ id: req.session.userId })
+		console.log(user)
 		return {
 			user
 		}
@@ -46,14 +48,14 @@ export default class AuthResolver {
 		return { user: userRes }
 	}
 
-	@Query(() => UserResponse)
+	@Mutation(() => UserResponse)
 	async login(
 		@Arg('data') loginUserData: UserInputType,
 		@Ctx() { req }: Context
 	): Promise<UserResponse> {
 		const { name, password } = loginUserData
 		const user = await User.findOne({ where: { name } })
-
+		console.log('User: ', user)
 		if (!user) {
 			return NoUsernameError
 		}

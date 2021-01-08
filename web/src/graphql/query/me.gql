@@ -1,5 +1,5 @@
-mutation Login($data: UserInputType!) {
-	login(data: $data) {
+query Me {
+	me {
 		errors {
 			field
 			message

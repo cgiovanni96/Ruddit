@@ -3,7 +3,7 @@ import { Form, Formik } from 'formik'
 import React from 'react'
 import { useRouter } from 'next/dist/client/router'
 
-import { useRegisterMutation } from '../generated/graphql'
+import { useLoginMutation } from '../generated/graphql'
 import Container from '../components/Container'
 import Field from '../components/Field'
 import errorMap from '../lib/util/errorMap'
@@ -11,19 +11,19 @@ import { withApollo } from '../lib/apollo/withApollo'
 
 // interface RegisterProps {}
 
-const Register: React.FC = ({}) => {
+const Login: React.FC = ({}) => {
 	const router = useRouter()
-	const [register] = useRegisterMutation()
+	const [login] = useLoginMutation()
 	return (
 		<Container variant="small">
 			<Formik
 				initialValues={{ name: '', password: '' }}
 				onSubmit={async (values, { setErrors }) => {
 					console.log(values)
-					const response = await register({ variables: { data: values } })
-					if (response.data?.register.errors) {
-						setErrors(errorMap(response.data.register.errors))
-					} else if (response.data?.register.user) {
+					const response = await login({ variables: { data: values } })
+					if (response.data?.login.errors) {
+						setErrors(errorMap(response.data.login.errors))
+					} else if (response.data?.login.user) {
 						router.push('/')
 					}
 				}}
@@ -48,4 +48,4 @@ const Register: React.FC = ({}) => {
 	)
 }
 
-export default withApollo({ ssr: false })(Register)
+export default withApollo({ ssr: false })(Login)
