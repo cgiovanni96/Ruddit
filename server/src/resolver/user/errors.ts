@@ -1,5 +1,14 @@
 import UserResponse from 'src/database/schema/response/UserResponse'
 
+export const EmailNotValidError: UserResponse = {
+	errors: [
+		{
+			field: 'email',
+			message: 'The given email is not a correct email address'
+		}
+	]
+}
+
 export const NoUsernameError: UserResponse = {
 	errors: [
 		{

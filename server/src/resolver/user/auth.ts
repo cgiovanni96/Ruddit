@@ -5,11 +5,14 @@ import UserResponse from '../../database/schema/response/UserResponse'
 import argon2 from 'argon2'
 import Context from 'src/app/server/context'
 import {
+	EmailNotValidError,
 	IncorrectPasswordError,
 	NoUsernameError,
 	PasswordLengthError,
 	UserAlreadyExistsError
 } from './errors'
+import { isEmail } from 'class-validator'
+import LoginInputType from './types/LoginInputType'
 
 @Resolver()
 export default class AuthResolver {
@@ -29,9 +32,10 @@ export default class AuthResolver {
 	): Promise<UserResponse> {
 		let userRes
 		try {
-			const { name, password } = registerUserData
+			const { name, password, email } = registerUserData
 			if (password.length <= 2) return PasswordLengthError
-			const user = await User.create({ name, password })
+			if (!isEmail(email)) return EmailNotValidError
+			const user = await User.create({ name, password, email })
 			userRes = await user.save()
 		} catch (e) {
 			if (e.code === '23505') {
@@ -45,11 +49,14 @@ export default class AuthResolver {
 
 	@Mutation(() => UserResponse)
 	async login(
-		@Arg('data') loginUserData: UserInputType,
+		@Arg('data') loginUserData: LoginInputType,
 		@Ctx() { req }: Context
 	): Promise<UserResponse> {
-		const { name, password } = loginUserData
-		const user = await User.findOne({ where: { name } })
+		const { name, password, email } = loginUserData
+
+		if (email && !isEmail(email)) return EmailNotValidError
+
+		const user = await User.findOne(name ? { name } : { email })
 		console.log('User: ', user)
 		if (!user) {
 			return NoUsernameError
@@ -80,4 +87,9 @@ export default class AuthResolver {
 			})
 		)
 	}
+
+	// @Mutation(Boolean)
+	// async forgotPassword(@Ctx() { req }: Context): Promise<boolean> {
+	// 	const user = await User.findOne({ id: req.session.userId })
+	// }
 }

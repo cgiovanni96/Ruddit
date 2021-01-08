@@ -6,5 +6,8 @@ export default class UserInputType {
 	name: string
 
 	@Field()
+	email: string
+
+	@Field()
 	password: string
 }

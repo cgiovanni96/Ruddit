@@ -18,10 +18,16 @@ type FieldError {
   message: String!
 }
 
+input LoginInputType {
+  email: String
+  name: String
+  password: String!
+}
+
 type Mutation {
   createPost(data: CreatePostInputType!): Post
   deletePost(id: String!): Boolean!
-  login(data: UserInputType!): UserResponse!
+  login(data: LoginInputType!): UserResponse!
   logout: Boolean!
   register(data: UserInputType!): UserResponse!
   updatePost(data: CreatePostInputType!, id: String!): Boolean
@@ -44,12 +50,14 @@ type Query {
 
 type User {
   createdAt: DateTime!
+  email: String!
   id: String!
   name: String!
   updatedAt: DateTime!
 }
 
 input UserInputType {
+  email: String!
   name: String!
   password: String!
 }

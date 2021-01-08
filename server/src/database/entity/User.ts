@@ -24,6 +24,10 @@ export default class User extends BaseEntity {
 	@Column()
 	password!: string
 
+	@Column()
+	@Field()
+	email?: string
+
 	@CreateDateColumn()
 	@Field()
 	createdAt: Date
