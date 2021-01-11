@@ -3,6 +3,7 @@ import { buildSchema } from 'type-graphql'
 import path from 'path'
 
 import resolvers from './resolvers'
+import isAuth from '../../middleware/isAuth'
 
 const schemaPath = path.join(__dirname, 'schema.graphql')
 
@@ -11,6 +12,7 @@ export default async (emitSchema = false): Promise<GraphQLSchema> => {
 
 	return await buildSchema({
 		resolvers,
-		emitSchemaFile
+		emitSchemaFile,
+		authChecker: isAuth
 	})
 }

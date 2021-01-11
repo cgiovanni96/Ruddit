@@ -1,5 +1,5 @@
 import Context from '../../app/server/context'
-import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql'
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import Post from '../../database/entity/Post'
 import CreatePostInputType from './types/CreatePostInputType'
 
@@ -15,6 +15,7 @@ export default class PostResolver {
 		return Post.findOne(id)
 	}
 
+	@Authorized()
 	@Mutation(() => Post, { nullable: true })
 	async createPost(
 		@Arg('data') createPostData: CreatePostInputType,
