@@ -1,10 +1,14 @@
-import { Box, Flex, Heading, Spacer, Stack, Text } from '@chakra-ui/react'
+import { Box, Flex, Heading, Spacer, Text } from '@chakra-ui/react'
 import Layout from '../components/Layout'
 import { usePostsQuery } from '../generated/graphql'
 import { withApollo } from '../lib/apollo/withApollo'
 
 const Index: React.FC = () => {
-	const { data, loading } = usePostsQuery()
+	const { data, loading } = usePostsQuery({
+		variables: {
+			limit: 2
+		}
+	})
 
 	if (!loading && !data) {
 		return <div>Something happened</div>

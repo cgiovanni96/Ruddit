@@ -1,4 +1,4 @@
-import UserResponse from 'src/database/schema/response/UserResponse'
+import UserResponse from '../../database/schema/response/UserResponse'
 
 export const EmailNotValidError: UserResponse = {
 	errors: [
