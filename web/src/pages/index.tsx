@@ -1,5 +1,5 @@
-import { Heading, Box } from '@chakra-ui/react'
-import Navbar from '../components/Navbar'
+import { Heading } from '@chakra-ui/react'
+import Layout from '../components/Layout'
 import { useGetPostsQuery } from '../generated/graphql'
 import { withApollo } from '../lib/apollo/withApollo'
 
@@ -11,12 +11,11 @@ const Index: React.FC = () => {
 	}
 
 	return (
-		<Box>
-			<Navbar />
+		<Layout>
 			<Heading as="h1" size="2xl">
 				Hello!
 			</Heading>
-		</Box>
+		</Layout>
 	)
 }
 

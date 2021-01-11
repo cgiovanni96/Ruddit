@@ -1,14 +1,14 @@
-import { Button, Spacer, Flex, Center, Box } from '@chakra-ui/react'
+import { Button, Spacer, Flex, Box } from '@chakra-ui/react'
 import { Form, Formik } from 'formik'
 import React from 'react'
 import { useRouter } from 'next/dist/client/router'
 import RouterLink from 'next/link'
 
 import { MeDocument, MeQuery, useLoginMutation } from '../generated/graphql'
-import Container from '../components/Container'
 import Field from '../components/Field'
 import errorMap from '../lib/util/errorMap'
 import { withApollo } from '../lib/apollo/withApollo'
+import Layout from '../components/Layout'
 
 // interface RegisterProps {}
 
@@ -16,7 +16,7 @@ const Login: React.FC = ({}) => {
 	const router = useRouter()
 	const [login] = useLoginMutation()
 	return (
-		<Container variant="small">
+		<Layout variant="small">
 			<Box bgColor={'blue.700'} p={6} rounded={'md'}>
 				<Formik
 					initialValues={{ name: '', password: '', email: '' }}
@@ -37,7 +37,9 @@ const Login: React.FC = ({}) => {
 						if (response.data?.login.errors) {
 							setErrors(errorMap(response.data.login.errors))
 						} else if (response.data?.login.user) {
-							router.push('/')
+							if (typeof router.query?.next === 'string')
+								router.push(router.query.next)
+							else router.push('/')
 						}
 					}}
 				>
@@ -81,7 +83,7 @@ const Login: React.FC = ({}) => {
 					)}
 				</Formik>
 			</Box>
-		</Container>
+		</Layout>
 	)
 }
 

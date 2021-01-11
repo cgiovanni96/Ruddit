@@ -4,10 +4,10 @@ import React from 'react'
 import { useRouter } from 'next/dist/client/router'
 
 import { MeDocument, MeQuery, useRegisterMutation } from '../generated/graphql'
-import Container from '../components/Container'
 import Field from '../components/Field'
 import errorMap from '../lib/util/errorMap'
 import { withApollo } from '../lib/apollo/withApollo'
+import Layout from '../components/Layout'
 
 // interface RegisterProps {}
 
@@ -15,7 +15,7 @@ const Register: React.FC = ({}) => {
 	const router = useRouter()
 	const [register] = useRegisterMutation()
 	return (
-		<Container variant="small">
+		<Layout variant="small">
 			<Formik
 				initialValues={{ name: '', password: '', email: '' }}
 				onSubmit={async (values, { setErrors }) => {
@@ -62,7 +62,7 @@ const Register: React.FC = ({}) => {
 					</Form>
 				)}
 			</Formik>
-		</Container>
+		</Layout>
 	)
 }
 

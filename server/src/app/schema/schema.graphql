@@ -25,7 +25,7 @@ input LoginInputType {
 }
 
 type Mutation {
-  changePassword(newPassword: String!, token: String!): UserResponse
+  changePassword(newPassword: String!, token: String!): UserResponse!
   createPost(data: CreatePostInputType!): Post
   deletePost(id: String!): Boolean!
   forgotPassword(email: String!): Boolean!

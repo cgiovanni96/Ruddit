@@ -11,6 +11,7 @@ import {
 import { withApollo } from '../../lib/apollo/withApollo'
 import errorMap from '../../lib/util/errorMap'
 import Field from '../../components/Field'
+import Layout from '../../components/Layout'
 
 interface ForgotPasswordProps {
 	token: string
@@ -21,7 +22,7 @@ const ForgotPassword: NextPage<ForgotPasswordProps> = ({ token }) => {
 	const [changePassword] = useChangePasswordMutation()
 	const [tokenError, setTokenError] = useState('')
 	return (
-		<Container variant="small">
+		<Layout variant="small">
 			<Box bgColor={'blue.700'} p={6} rounded={'md'}>
 				<Formik
 					initialValues={{ newPassword: '' }}
@@ -64,7 +65,7 @@ const ForgotPassword: NextPage<ForgotPasswordProps> = ({ token }) => {
 					)}
 				</Formik>
 			</Box>
-		</Container>
+		</Layout>
 	)
 }
 

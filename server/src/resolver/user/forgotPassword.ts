@@ -37,12 +37,12 @@ export default class ForgotPasswordResolver {
 		return true
 	}
 
-	@Mutation(() => UserResponse, { nullable: true })
+	@Mutation(() => UserResponse)
 	async changePassword(
 		@Arg('token') token: string,
 		@Arg('newPassword') newPassword: string,
 		@Ctx() { req, redis }: Context
-	): Promise<UserResponse | null> {
+	): Promise<UserResponse> {
 		const redisKey = FORGOT_PWD_PREFIX + token
 		console.log('newPassword: ', newPassword)
 		if (newPassword.length <= 2) return PasswordLengthError
