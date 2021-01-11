@@ -2,6 +2,7 @@ import { Button, Spacer, Flex, Center, Box } from '@chakra-ui/react'
 import { Form, Formik } from 'formik'
 import React from 'react'
 import { useRouter } from 'next/dist/client/router'
+import RouterLink from 'next/link'
 
 import { MeDocument, MeQuery, useLoginMutation } from '../generated/graphql'
 import Container from '../components/Container'
@@ -65,11 +66,17 @@ const Login: React.FC = ({}) => {
 								placeholder="Password"
 								label="Password"
 							/>
-							<Center>
-								<Button type="submit" mt={6} bgColor="green.200">
+							<Flex alignItems={'center'} mt={6}>
+								<Button type="submit" bgColor="green.200" colorScheme={'green'}>
 									Login
 								</Button>
-							</Center>
+								<Spacer ml={4} />
+								<RouterLink href="/forgot-password">
+									<Button as={'button'} variant={'outline'} colorScheme={'red'}>
+										Forgot Password
+									</Button>
+								</RouterLink>
+							</Flex>
 						</Form>
 					)}
 				</Formik>

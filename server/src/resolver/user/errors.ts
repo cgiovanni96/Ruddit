@@ -44,3 +44,12 @@ export const PasswordLengthError: UserResponse = {
 		}
 	]
 }
+
+export const TokenExpiredError: UserResponse = {
+	errors: [
+		{
+			field: 'token',
+			message: 'Token Expired'
+		}
+	]
+}

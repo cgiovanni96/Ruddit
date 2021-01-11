@@ -1,7 +1,6 @@
 fragment UserResponseFields on UserResponse {
 	errors {
-		field
-		message
+		...UserErrorFields
 	}
 	user {
 		...UserFields

@@ -1,9 +1,9 @@
 import session from 'express-session'
 import connectRedis from 'connect-redis'
 import Redis from 'ioredis'
-export const RedisStore = connectRedis(session)
 import { PROD } from '../../constants/server'
 
+export const RedisStore = connectRedis(session)
 export const redis = new Redis()
 
 export const cookieAge = (): number => {
