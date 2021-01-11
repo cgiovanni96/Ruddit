@@ -1,5 +1,6 @@
-query GetPosts {
+query Posts {
 	posts {
+		id
 		title
 		text
 	}

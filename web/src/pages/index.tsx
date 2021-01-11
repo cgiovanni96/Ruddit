@@ -1,10 +1,10 @@
-import { Heading } from '@chakra-ui/react'
+import { Box, Flex, Heading, Spacer, Stack, Text } from '@chakra-ui/react'
 import Layout from '../components/Layout'
-import { useGetPostsQuery } from '../generated/graphql'
+import { usePostsQuery } from '../generated/graphql'
 import { withApollo } from '../lib/apollo/withApollo'
 
 const Index: React.FC = () => {
-	const { data, loading } = useGetPostsQuery()
+	const { data, loading } = usePostsQuery()
 
 	if (!loading && !data) {
 		return <div>Something happened</div>
@@ -12,9 +12,23 @@ const Index: React.FC = () => {
 
 	return (
 		<Layout>
-			<Heading as="h1" size="2xl">
-				Hello!
-			</Heading>
+			<Flex flexDir={'column'}>
+				{data?.posts.map((p) => {
+					return (
+						<Box key={p.id} mt={8} p={4} rounded={'lg'} bgColor={'green.300'}>
+							<Flex flexDir={'column'}>
+								<Heading as={'h3'} size={'lg'} color={'gray.800'}>
+									{p.title}
+								</Heading>
+								<Spacer mt={2} />
+								<Text fontSize={'md'} color={'gray.800'}>
+									{p.text}
+								</Text>
+							</Flex>
+						</Box>
+					)
+				})}
+			</Flex>
 		</Layout>
 	)
 }
