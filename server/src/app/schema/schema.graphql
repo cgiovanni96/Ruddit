@@ -36,8 +36,10 @@ type Mutation {
 }
 
 type Post {
+  authorId: String!
   createdAt: DateTime!
   id: String!
+  points: Float!
   text: String!
   title: String!
   updatedAt: DateTime!

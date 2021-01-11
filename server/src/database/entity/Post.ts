@@ -3,10 +3,12 @@ import {
 	Column,
 	CreateDateColumn,
 	Entity,
+	ManyToOne,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn
 } from 'typeorm'
 import { Field, ObjectType } from 'type-graphql'
+import User from './User'
 
 @Entity()
 @ObjectType()
@@ -22,6 +24,17 @@ export default class Post extends BaseEntity {
 	@Column('text')
 	@Field()
 	text!: string
+
+	@Column('int', { default: 0 })
+	@Field()
+	points!: number
+
+	@Column()
+	@Field()
+	authorId: string
+
+	@ManyToOne(() => User, (user) => user.posts)
+	author: User
 
 	@CreateDateColumn()
 	@Field()

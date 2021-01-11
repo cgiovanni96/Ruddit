@@ -4,11 +4,13 @@ import {
 	Column,
 	CreateDateColumn,
 	Entity,
+	OneToMany,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn
 } from 'typeorm'
 import { Field, ObjectType } from 'type-graphql'
 import argon2 from 'argon2'
+import Post from './Post'
 
 @Entity()
 @ObjectType()
@@ -24,9 +26,12 @@ export default class User extends BaseEntity {
 	@Column()
 	password!: string
 
-	@Column()
+	@Column({ unique: true })
 	@Field()
 	email: string
+
+	@OneToMany(() => Post, (post) => post.author)
+	posts: Post[]
 
 	@CreateDateColumn()
 	@Field()
