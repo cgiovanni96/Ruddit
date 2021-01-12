@@ -7,8 +7,9 @@ import {
 	PrimaryGeneratedColumn,
 	UpdateDateColumn
 } from 'typeorm'
-import { Field, ObjectType } from 'type-graphql'
+import { Field, FieldResolver, ObjectType, Root } from 'type-graphql'
 import User from './User'
+import truncateString from '../../app/util/truncateString'
 
 @Entity()
 @ObjectType()
@@ -36,11 +37,16 @@ export default class Post extends BaseEntity {
 	@ManyToOne(() => User, (user) => user.posts)
 	author: User
 
+	@FieldResolver(() => String)
+	textSnippet(@Root() root: Post) {
+		return truncateString(root.text, 40)
+	}
+
 	@CreateDateColumn()
-	@Field()
+	@Field(() => String)
 	createdAt: Date
 
 	@UpdateDateColumn()
-	@Field()
+	@Field(() => String)
 	updatedAt: Date
 }

@@ -10,6 +10,7 @@ import {
 import { getConnection } from 'typeorm'
 import Context from '../../app/server/context'
 import Post from '../../database/entity/Post'
+// import userId from '../../database/userId'
 import CreatePostInputType from './types/CreatePostInputType'
 import PaginationArgumentsType from './types/PaginationArgumentsType'
 
@@ -20,19 +21,41 @@ export default class PostResolver {
 		@Args() { limit, cursor }: PaginationArgumentsType
 	): Promise<Post[]> {
 		const setLimit = Math.min(50, limit)
+		const limitPlusOne = setLimit + 1
 
-		const queryBuilder = getConnection()
+		// const queryBuilder = getConnection()
+		// 	.getRepository(Post)
+		// 	.createQueryBuilder('p')
+		// 	.where('user.id = :id', { id: userId })
+		// 	.orderBy('"createdAt"', 'DESC')
+		// 	.take(setLimit)
+
+		// if (cursor)
+		// 	queryBuilder.where('"createAt" < :cursor', {
+		// 		cursor: new Date(parseInt(cursor))
+		// 	})
+
+		const qb = getConnection()
 			.getRepository(Post)
 			.createQueryBuilder('p')
-			.where('user.id = :id', { id: '34cfbf79-f57e-45db-ac9d-cc193cc6249d' })
-			.orderBy('"createdAt"', 'DESC')
-			.take(setLimit)
+			.orderBy('p."createdAt"', 'DESC')
+			.take(limitPlusOne)
+		// .innerJoinAndSelect('p.author', 'u', 'u.id = p."authorId"')
 
-		if (cursor)
-			queryBuilder.where('"createAt" < :cursor', {
+		if (cursor) {
+			qb.where('p."createdAt" < :cursor', {
 				cursor: new Date(parseInt(cursor))
 			})
-		return queryBuilder.getMany()
+		}
+
+		const posts = await qb.getMany()
+		console.log('posts: ', posts)
+		return posts
+	}
+
+	@Query(() => [Post])
+	async easyPosts(): Promise<Post[]> {
+		return Post.find()
 	}
 
 	@Query(() => Post, { nullable: true })
