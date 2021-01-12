@@ -18,7 +18,8 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
-  posts: Array<Post>;
+  posts: PaginatedPostsResponse;
+  easyPosts: Array<Post>;
   post?: Maybe<Post>;
   hello: Scalars['String'];
   me?: Maybe<User>;
@@ -35,6 +36,12 @@ export type QueryPostArgs = {
   id: Scalars['String'];
 };
 
+export type PaginatedPostsResponse = {
+  __typename?: 'PaginatedPostsResponse';
+  posts: Array<Post>;
+  hasMore: Scalars['Boolean'];
+};
+
 export type Post = {
   __typename?: 'Post';
   id: Scalars['String'];
@@ -42,10 +49,10 @@ export type Post = {
   text: Scalars['String'];
   points: Scalars['Float'];
   authorId: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+  textSnippet: Scalars['String'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
 };
-
 
 export type User = {
   __typename?: 'User';
@@ -55,6 +62,7 @@ export type User = {
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
+
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -210,7 +218,7 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: string, title: string, text: string }> };
+export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPostsResponse', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: string, title: string, textSnippet: string, createdAt: string }> } };
 
 export const UserErrorFieldsFragmentDoc = gql`
     fragment UserErrorFields on FieldError {
@@ -462,9 +470,13 @@ export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const PostsDocument = gql`
     query Posts($limit: Int!, $cursor: String) {
   posts(limit: $limit, cursor: $cursor) {
-    id
-    title
-    text
+    hasMore
+    posts {
+      id
+      title
+      textSnippet
+      createdAt
+    }
   }
 }
     `;

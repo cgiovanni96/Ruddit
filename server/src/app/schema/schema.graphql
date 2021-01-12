@@ -35,12 +35,18 @@ type Mutation {
   updatePost(data: CreatePostInputType!, id: String!): Boolean
 }
 
+type PaginatedPostsResponse {
+  hasMore: Boolean!
+  posts: [Post!]!
+}
+
 type Post {
   authorId: String!
   createdAt: String!
   id: String!
   points: Float!
   text: String!
+  textSnippet: String!
   title: String!
   updatedAt: String!
 }
@@ -50,7 +56,7 @@ type Query {
   hello: String!
   me: User
   post(id: String!): Post
-  posts(cursor: String, limit: Int!): [Post!]!
+  posts(cursor: String, limit: Int!): PaginatedPostsResponse!
 }
 
 type User {

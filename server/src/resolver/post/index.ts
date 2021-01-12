@@ -10,47 +10,41 @@ import {
 import { getConnection } from 'typeorm'
 import Context from '../../app/server/context'
 import Post from '../../database/entity/Post'
+import PaginatedPostsResponse from '../../database/schema/response/PaginatedPostsResponse'
 // import userId from '../../database/userId'
 import CreatePostInputType from './types/CreatePostInputType'
 import PaginationArgumentsType from './types/PaginationArgumentsType'
 
 @Resolver()
 export default class PostResolver {
-	@Query(() => [Post])
+	@Query(() => PaginatedPostsResponse)
 	async posts(
 		@Args() { limit, cursor }: PaginationArgumentsType
-	): Promise<Post[]> {
+	): Promise<PaginatedPostsResponse> {
 		const setLimit = Math.min(50, limit)
-		const limitPlusOne = setLimit + 1
+		const limitPlusOne = limit + 1
 
-		// const queryBuilder = getConnection()
-		// 	.getRepository(Post)
-		// 	.createQueryBuilder('p')
-		// 	.where('user.id = :id', { id: userId })
-		// 	.orderBy('"createdAt"', 'DESC')
-		// 	.take(setLimit)
+		const replacements: any[] = [limitPlusOne]
 
-		// if (cursor)
-		// 	queryBuilder.where('"createAt" < :cursor', {
-		// 		cursor: new Date(parseInt(cursor))
-		// 	})
+		if (cursor) replacements.push(new Date(parseInt(cursor)))
 
-		const qb = getConnection()
-			.getRepository(Post)
-			.createQueryBuilder('p')
-			.orderBy('p."createdAt"', 'DESC')
-			.take(limitPlusOne)
-		// .innerJoinAndSelect('p.author', 'u', 'u.id = p."authorId"')
+		const posts = await getConnection().query(
+			`
+				select p.*
+				from post p
+				${cursor ? `where p."createdAt" < $2` : ''}
+				order by p."createdAt" DESC
+				limit $1
+			`,
+			replacements
+		)
 
-		if (cursor) {
-			qb.where('p."createdAt" < :cursor', {
-				cursor: new Date(parseInt(cursor))
-			})
+		const res = {
+			posts: posts.slice(0, setLimit),
+			hasMore: posts.length === limitPlusOne
 		}
 
-		const posts = await qb.getMany()
-		console.log('posts: ', posts)
-		return posts
+		return res
 	}
 
 	@Query(() => [Post])
