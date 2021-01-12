@@ -30,8 +30,14 @@ export default class PostResolver {
 
 		const posts = await getConnection().query(
 			`
-				select p.*
+				select p.*, 
+				json_build_object(
+					'id', u.id,
+					'name', u.name,
+					'email', u.email
+				) author
 				from post p
+				inner join public.user u on u.id = p."authorId"
 				${cursor ? `where p."createdAt" < $2` : ''}
 				order by p."createdAt" DESC
 				limit $1
