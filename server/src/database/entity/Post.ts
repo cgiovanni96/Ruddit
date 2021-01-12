@@ -4,12 +4,14 @@ import {
 	CreateDateColumn,
 	Entity,
 	ManyToOne,
+	OneToMany,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn
 } from 'typeorm'
 import { Field, ObjectType } from 'type-graphql'
 import User from './User'
 import truncateString from '../../app/util/truncateString'
+import Vote from './Vote'
 
 @Entity()
 @ObjectType()
@@ -34,9 +36,12 @@ export default class Post extends BaseEntity {
 	@Field()
 	authorId: string
 
-	@ManyToOne(() => User, (user) => user.posts)
+	@ManyToOne(() => User)
 	@Field()
 	author: User
+
+	@OneToMany(() => Vote, (vote) => vote.post)
+	votes: Vote[]
 
 	@Field(() => String)
 	textSnippet(): string {

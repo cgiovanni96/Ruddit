@@ -33,6 +33,7 @@ type Mutation {
   logout: Boolean!
   register(data: UserInputType!): UserResponse!
   updatePost(data: CreatePostInputType!, id: String!): Boolean
+  vote(postId: String!, value: Int!): Boolean!
 }
 
 type PaginatedPostsResponse {
