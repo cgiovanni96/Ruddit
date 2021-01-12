@@ -18,7 +18,12 @@ const CreatePost: React.FC = ({}) => {
 			<Formik
 				initialValues={{ title: '', text: '' }}
 				onSubmit={async (values) => {
-					await createPost({ variables: { data: values } })
+					await createPost({
+						variables: { data: values },
+						update: (cache) => {
+							cache.evict({ fieldName: 'posts:{}' })
+						}
+					})
 					router.push('/')
 				}}
 			>
