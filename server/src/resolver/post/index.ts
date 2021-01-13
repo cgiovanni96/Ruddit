@@ -3,20 +3,28 @@ import {
 	Args,
 	Authorized,
 	Ctx,
+	FieldResolver,
 	Mutation,
 	Query,
-	Resolver
+	Resolver,
+	Root
 } from 'type-graphql'
 import { getConnection } from 'typeorm'
 import Context from '../../app/server/context'
 import Post from '../../database/entity/Post'
+import User from '../../database/entity/User'
 import PaginatedPostsResponse from '../../database/schema/response/PaginatedPostsResponse'
 // import userId from '../../database/userId'
 import CreatePostInputType from './types/CreatePostInputType'
 import PaginationArgumentsType from './types/PaginationArgumentsType'
 
-@Resolver()
+@Resolver(Post)
 export default class PostResolver {
+	@FieldResolver(() => User)
+	author(@Root() post: Post, @Ctx() { loaders }: Context) {
+		return loaders.authorLoader.load(post.authorId)
+	}
+
 	@Query(() => PaginatedPostsResponse)
 	async posts(
 		@Args() { limit, cursor }: PaginationArgumentsType
@@ -30,14 +38,8 @@ export default class PostResolver {
 
 		const posts = await getConnection().query(
 			`
-				select p.*, 
-				json_build_object(
-					'id', u.id,
-					'name', u.name,
-					'email', u.email
-				) author
+				select p.*
 				from post p
-				inner join public.user u on u.id = p."authorId"
 				${cursor ? `where p."createdAt" < $2` : ''}
 				order by p."createdAt" DESC
 				limit $1

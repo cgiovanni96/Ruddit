@@ -6,6 +6,7 @@ import cors from 'cors'
 import session, { redis } from './redis'
 import build from '../schema/build'
 import Context from './context'
+import authorLoader from '../loader/authorLoader'
 
 export default async (emitSchema: boolean = false, PORT: string) => {
 	void createConnection()
@@ -19,9 +20,18 @@ export default async (emitSchema: boolean = false, PORT: string) => {
 	)
 	app.use(session)
 
+	const loaders = {
+		authorLoader: authorLoader()
+	}
+
 	const server = new ApolloServer({
 		schema: await build(emitSchema),
-		context: ({ req, res }): Context => ({ req, res, redis })
+		context: ({ req, res }): Context => ({
+			req,
+			res,
+			redis,
+			loaders
+		})
 	})
 
 	server.applyMiddleware({ app, cors: false })
