@@ -7,6 +7,7 @@ import session, { redis } from './redis'
 import build from '../schema/build'
 import Context from './context'
 import authorLoader from '../loader/authorLoader'
+import voteLoader from '../loader/voteLoader'
 
 export default async (emitSchema: boolean = false, PORT: string) => {
 	void createConnection()
@@ -21,7 +22,8 @@ export default async (emitSchema: boolean = false, PORT: string) => {
 	app.use(session)
 
 	const loaders = {
-		authorLoader: authorLoader()
+		authorLoader: authorLoader(),
+		voteLoader: voteLoader()
 	}
 
 	const server = new ApolloServer({

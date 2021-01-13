@@ -4,6 +4,7 @@ import {
 	Authorized,
 	Ctx,
 	FieldResolver,
+	Int,
 	Mutation,
 	Query,
 	Resolver,
@@ -23,6 +24,16 @@ export default class PostResolver {
 	@FieldResolver(() => User)
 	author(@Root() post: Post, @Ctx() { loaders }: Context) {
 		return loaders.authorLoader.load(post.authorId)
+	}
+
+	@FieldResolver(() => Int, { nullable: true })
+	async voteStatus(@Root() post: Post, @Ctx() { loaders, req }: Context) {
+		if (!req.session.userId) return null
+		const vote = await loaders.voteLoader.load({
+			postId: post.id,
+			userId: req.session.userId
+		})
+		return vote ? vote.value : null
 	}
 
 	@Query(() => PaginatedPostsResponse)

@@ -51,6 +51,7 @@ type Post {
   textSnippet: String!
   title: String!
   updatedAt: String!
+  voteStatus: Int
 }
 
 type Query {

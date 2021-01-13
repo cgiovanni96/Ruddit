@@ -1,14 +1,15 @@
 import { Request, Response } from 'express'
 import { Redis } from 'ioredis'
-import DataLoader from 'dataloader'
-import User from '../../database/entity/User'
+import voteLoader from '../loader/voteLoader'
+import authorLoader from '../loader/authorLoader'
 
 type Session = {
 	userId?: string | undefined
 }
 
 type Loaders = {
-	authorLoader: DataLoader<string, User, string>
+	authorLoader: ReturnType<typeof authorLoader>
+	voteLoader: ReturnType<typeof voteLoader>
 }
 
 type Context = {
