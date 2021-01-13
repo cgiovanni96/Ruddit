@@ -26,7 +26,8 @@ export default class VoteResolver {
 		await getConnection()
 			.createQueryBuilder()
 			.update(Post)
-			.set({ votes: () => `votes + ${escapedValue}` })
+			.where('id = :id', { id: postId })
+			.set({ points: () => `points + ${escapedValue}` })
 			.execute()
 
 		return true

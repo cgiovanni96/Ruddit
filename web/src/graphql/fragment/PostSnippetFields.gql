@@ -1,0 +1,11 @@
+fragment PostSnippetFields on Post {
+	id
+	title
+	textSnippet
+	createdAt
+	points
+	author {
+		id
+		name
+	}
+}

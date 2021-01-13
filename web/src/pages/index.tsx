@@ -5,14 +5,14 @@ import {
 	Flex,
 	Heading,
 	Link,
-	Spacer,
-	Stack,
-	Text
+	Stack
 } from '@chakra-ui/react'
 import Layout from '../components/Layout'
 import RouterLink from 'next/link'
 import { usePostsQuery } from '../generated/graphql'
 import { withApollo } from '../lib/apollo/withApollo'
+import Upvote from '../components/Post/Upvote'
+import Post from '../components/Post/Post'
 
 const Index: React.FC = () => {
 	const { data, loading, fetchMore, variables } = usePostsQuery({
@@ -49,15 +49,17 @@ const Index: React.FC = () => {
 			<Stack spacing={6}>
 				{data?.posts.posts.map((p) => {
 					return (
-						<Box key={p.id} mt={8} p={4} rounded={'lg'} bgColor={'green.300'}>
-							<Flex flexDir={'column'}>
-								<Heading as={'h3'} size={'lg'} color={'gray.800'}>
-									{p.title}
-								</Heading>
-								<Spacer mt={2} />
-								<Text fontSize={'md'} color={'gray.800'}>
-									{p.textSnippet}&hellip;
-								</Text>
+						<Box
+							key={p.id}
+							flex={1}
+							mt={8}
+							p={4}
+							rounded={'lg'}
+							bgColor={'green.300'}
+						>
+							<Flex>
+								<Upvote post={p} />
+								<Post post={p} />
 							</Flex>
 						</Box>
 					)
