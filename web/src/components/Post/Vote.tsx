@@ -8,16 +8,46 @@ import {
 	PostSnippetFieldsFragment,
 	useVoteMutation
 } from '../../generated/graphql'
+import { gql } from '@apollo/client'
 
 interface UpvoteProps {
 	post: PostSnippetFieldsFragment
 }
 
+type VotedPostFragment = {
+	id: string
+	points: number
+}
+
+const votingFragment = gql`
+	fragment _ on Post {
+		id
+		points
+	}
+`
+
 const Upvote: React.FC<UpvoteProps> = ({ post }) => {
 	const [vote] = useVoteMutation()
 
 	const voteOnClick = (value: number) => {
-		vote({ variables: { postId: post.id, value } })
+		vote({
+			variables: { postId: post.id, value },
+			update: (cache) => {
+				const postId = 'Post:' + post.id
+				const data = cache.readFragment<VotedPostFragment>({
+					id: postId,
+					fragment: votingFragment
+				})
+
+				if (data) {
+					cache.writeFragment({
+						id: postId,
+						fragment: votingFragment,
+						data: { points: value }
+					})
+				}
+			}
+		})
 	}
 
 	return (

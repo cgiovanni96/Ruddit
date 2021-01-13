@@ -11,7 +11,7 @@ import Layout from '../components/Layout'
 import RouterLink from 'next/link'
 import { usePostsQuery } from '../generated/graphql'
 import { withApollo } from '../lib/apollo/withApollo'
-import Upvote from '../components/Post/Upvote'
+import Vote from '../components/Post/Vote'
 import Post from '../components/Post/Post'
 
 const Index: React.FC = () => {
@@ -58,7 +58,7 @@ const Index: React.FC = () => {
 							bgColor={'green.300'}
 						>
 							<Flex>
-								<Upvote post={p} />
+								<Vote post={p} />
 								<Post post={p} />
 							</Flex>
 						</Box>
