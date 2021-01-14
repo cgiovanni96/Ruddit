@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react'
 import Layout from '../components/Layout'
 import RouterLink from 'next/link'
-import { usePostsQuery } from '../generated/graphql'
+import { usePostsQuery, useMeQuery } from '../generated/graphql'
 import { withApollo } from '../lib/apollo/withApollo'
 import Vote from '../components/Post/Vote'
 import Post from '../components/Post/Post'
@@ -22,6 +22,8 @@ const Index: React.FC = () => {
 		},
 		notifyOnNetworkStatusChange: true
 	})
+
+	const { data: meData } = useMeQuery()
 
 	if (!loading && !data) {
 		return <div>Something happened</div>
@@ -59,7 +61,7 @@ const Index: React.FC = () => {
 						>
 							<Flex>
 								<Vote post={p} />
-								<Post post={p} />
+								<Post post={p} loggedUserId={meData?.me?.id} />
 							</Flex>
 						</Box>
 					)

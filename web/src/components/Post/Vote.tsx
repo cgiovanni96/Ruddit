@@ -78,7 +78,7 @@ const Vote: React.FC<UpvoteProps> = ({ post }) => {
 				}}
 				isLoading={loading === 'upvote-loading'}
 			/>
-			<Text my={2} color={'gray.800'}>
+			<Text my={2} color={'gray.500'}>
 				{post.points}
 			</Text>
 			<IconButton

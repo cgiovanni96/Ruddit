@@ -4,12 +4,12 @@ import RouterLink from 'next/link'
 
 import { useMeQuery, useLogoutMutation } from '../generated/graphql'
 import { useApolloClient } from '@apollo/client'
-// import isServer from '../lib/util/isServer'
+import isServer from '../lib/util/isServer'
 // interface NavbarProps {}
 
 const Navbar: React.FC = ({}) => {
 	const { error, loading, data } = useMeQuery({
-		// skip: isServer()
+		skip: isServer()
 	})
 	const [logout] = useLogoutMutation()
 	const apolloClient = useApolloClient()
