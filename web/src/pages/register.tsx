@@ -1,15 +1,12 @@
 import { Button, Spacer } from '@chakra-ui/react'
 import { Form, Formik } from 'formik'
-import React from 'react'
 import { useRouter } from 'next/dist/client/router'
-
-import { MeDocument, MeQuery, useRegisterMutation } from '../generated/graphql'
+import React from 'react'
 import Field from '../components/Field'
-import errorMap from '../lib/util/errorMap'
-import { withApollo } from '../lib/apollo/withApollo'
 import Layout from '../components/Layout'
-
-// interface RegisterProps {}
+import { MeDocument, MeQuery, useRegisterMutation } from '../generated/graphql'
+import { withApollo } from '../lib/apollo/withApollo'
+import errorMap from '../lib/util/errorMap'
 
 const Register: React.FC = ({}) => {
 	const router = useRouter()
@@ -39,7 +36,7 @@ const Register: React.FC = ({}) => {
 					}
 				}}
 			>
-				{({ values, handleChange, isSubmitting }) => (
+				{() => (
 					<Form>
 						<Field name="name" placeholder="Username" label="Username" />
 						<Spacer mt={6} />

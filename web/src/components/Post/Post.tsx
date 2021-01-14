@@ -1,8 +1,6 @@
 import { Box, Flex, Heading, Link, Spacer, Text } from '@chakra-ui/react'
-
-import React from 'react'
 import RouterLink from 'next/link'
-
+import React from 'react'
 import { PostSnippetFieldsFragment } from '../../generated/graphql'
 import ActionMenu from './ActionMenu'
 

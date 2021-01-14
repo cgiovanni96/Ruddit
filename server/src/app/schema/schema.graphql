@@ -32,7 +32,7 @@ type Mutation {
   login(data: LoginInputType!): UserResponse!
   logout: Boolean!
   register(data: UserInputType!): UserResponse!
-  updatePost(data: CreatePostInputType!, id: String!): Boolean
+  updatePost(data: UpdatePostInputType!, id: String!): Post
   vote(postId: String!, value: Int!): Boolean!
 }
 
@@ -60,6 +60,11 @@ type Query {
   me: User
   post(id: String!): Post
   posts(cursor: String, limit: Int!): PaginatedPostsResponse!
+}
+
+input UpdatePostInputType {
+  text: String
+  title: String
 }
 
 type User {

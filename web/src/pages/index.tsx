@@ -7,12 +7,12 @@ import {
 	Link,
 	Stack
 } from '@chakra-ui/react'
-import Layout from '../components/Layout'
 import RouterLink from 'next/link'
-import { usePostsQuery, useMeQuery } from '../generated/graphql'
-import { withApollo } from '../lib/apollo/withApollo'
-import Vote from '../components/Post/Vote'
+import Layout from '../components/Layout'
 import Post from '../components/Post/Post'
+import Vote from '../components/Post/Vote'
+import { useMeQuery, usePostsQuery } from '../generated/graphql'
+import { withApollo } from '../lib/apollo/withApollo'
 
 const Index: React.FC = () => {
 	const { data, loading, fetchMore, variables } = usePostsQuery({

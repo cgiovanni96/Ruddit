@@ -14,7 +14,12 @@ type FieldProps = InputHTMLAttributes<HTMLInputElement> & {
 	isTextarea?: boolean
 }
 
-const Field: React.FC<FieldProps> = ({ label, isTextarea, size, ...props }) => {
+const Field: React.FC<FieldProps> = ({
+	label,
+	isTextarea,
+	size: _,
+	...props
+}) => {
 	let InputField: any = Input
 	if (isTextarea) InputField = Textarea
 	const [field, { error }] = useField(props)

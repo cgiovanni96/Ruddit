@@ -1,11 +1,9 @@
-import { Container, Button, Text, Box } from '@chakra-ui/react'
-import { Formik, Form } from 'formik'
+import { Box, Button, Container, Text } from '@chakra-ui/react'
+import { Form, Formik } from 'formik'
 import React, { useState } from 'react'
+import Field from '../components/Field'
 import { useForgotPasswordMutation } from '../generated/graphql'
 import { withApollo } from '../lib/apollo/withApollo'
-import Field from '../components/Field'
-
-// interface ForgotPasswordProps {}
 
 const ForgotPassword: React.FC = ({}) => {
 	const [forgotPassword] = useForgotPasswordMutation()
@@ -25,7 +23,7 @@ const ForgotPassword: React.FC = ({}) => {
 						setComplete(true)
 					}}
 				>
-					{({ values, handleChange, isSubmitting }) => (
+					{() => (
 						<Form>
 							<Field
 								name="email"

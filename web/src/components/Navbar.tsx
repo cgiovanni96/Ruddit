@@ -1,11 +1,9 @@
-import React from 'react'
+import { useApolloClient } from '@apollo/client'
 import { Button, Flex, Heading, Link, Spacer, Text } from '@chakra-ui/react'
 import RouterLink from 'next/link'
-
-import { useMeQuery, useLogoutMutation } from '../generated/graphql'
-import { useApolloClient } from '@apollo/client'
+import React from 'react'
+import { useLogoutMutation, useMeQuery } from '../generated/graphql'
 import isServer from '../lib/util/isServer'
-// interface NavbarProps {}
 
 const Navbar: React.FC = ({}) => {
 	const { error, loading, data } = useMeQuery({

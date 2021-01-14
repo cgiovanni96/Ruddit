@@ -1,14 +1,13 @@
-import { Button, Spacer, Flex, Box } from '@chakra-ui/react'
+import { Box, Button, Flex, Spacer } from '@chakra-ui/react'
 import { Form, Formik } from 'formik'
-import React from 'react'
 import { useRouter } from 'next/dist/client/router'
 import RouterLink from 'next/link'
-
-import { MeDocument, MeQuery, useLoginMutation } from '../generated/graphql'
+import React from 'react'
 import Field from '../components/Field'
-import errorMap from '../lib/util/errorMap'
-import { withApollo } from '../lib/apollo/withApollo'
 import Layout from '../components/Layout'
+import { MeDocument, MeQuery, useLoginMutation } from '../generated/graphql'
+import { withApollo } from '../lib/apollo/withApollo'
+import errorMap from '../lib/util/errorMap'
 
 // interface RegisterProps {}
 
@@ -44,7 +43,7 @@ const Login: React.FC = ({}) => {
 						}
 					}}
 				>
-					{({ values, handleChange, isSubmitting }) => (
+					{({ values }) => (
 						<Form>
 							<Flex>
 								<Field

@@ -1,17 +1,13 @@
-import { useRouter } from 'next/router'
-import React from 'react'
-import { withApollo } from '../../lib/apollo/withApollo'
-
-import { usePostQuery } from '../../generated/graphql'
-import Layout from '../../components/Layout'
 import { Box, Flex, Heading, Text } from '@chakra-ui/react'
+import React from 'react'
+import Layout from '../../components/Layout'
+import { usePostQuery } from '../../generated/graphql'
+import { withApollo } from '../../lib/apollo/withApollo'
+import useGetId from '../../lib/hook/useGetId'
 
 const Post: React.FC = ({}) => {
-	const router = useRouter()
-	const id: string = typeof router.query.id === 'string' ? router.query.id : ''
-	const { loading, error, data } = usePostQuery({
-		variables: { id }
-	})
+	const id = useGetId()
+	const { error, loading, data } = usePostQuery({ variables: { id } })
 
 	if (error || !data) {
 		return <div>Error</div>
@@ -21,13 +17,17 @@ const Post: React.FC = ({}) => {
 		return <div>Loading</div>
 	}
 
+	if (!data.post) {
+		return <div> post not found</div>
+	}
+
 	return (
 		<Layout>
 			<Box mt={6} p={8} bgColor={'gray.900'} rounded={'lg'}>
 				<Flex flexDir={'column'}>
-					<Heading as={'h2'}>{data.post?.title}</Heading>
+					<Heading as={'h2'}>{data.post.title}</Heading>
 					<Box>
-						<Text>{data.post?.text}</Text>
+						<Text>{data.post.text}</Text>
 					</Box>
 				</Flex>
 			</Box>

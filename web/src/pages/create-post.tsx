@@ -1,12 +1,12 @@
-import { Spacer, Button } from '@chakra-ui/react'
-import { Formik, Form } from 'formik'
-import React from 'react'
-import { withApollo } from '../lib/apollo/withApollo'
-import Field from '../components/Field'
-import { useCreatePostMutation } from '../generated/graphql'
+import { Button, Spacer } from '@chakra-ui/react'
+import { Form, Formik } from 'formik'
 import { useRouter } from 'next/router'
-import useIsAuthorized from '../lib/hook/useIsAuthorized'
+import React from 'react'
+import Field from '../components/Field'
 import Layout from '../components/Layout'
+import { useCreatePostMutation } from '../generated/graphql'
+import { withApollo } from '../lib/apollo/withApollo'
+import useIsAuthorized from '../lib/hook/useIsAuthorized'
 
 const CreatePost: React.FC = ({}) => {
 	const [createPost] = useCreatePostMutation()
@@ -27,7 +27,7 @@ const CreatePost: React.FC = ({}) => {
 					router.push('/')
 				}}
 			>
-				{({ values, handleChange, isSubmitting }) => (
+				{() => (
 					<Form>
 						<Field name="title" placeholder="Title" label="Title" />
 						<Spacer mt={6} />

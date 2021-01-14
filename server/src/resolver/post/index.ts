@@ -18,6 +18,7 @@ import PaginatedPostsResponse from '../../database/schema/response/PaginatedPost
 // import userId from '../../database/userId'
 import CreatePostInputType from './types/CreatePostInputType'
 import PaginationArgumentsType from './types/PaginationArgumentsType'
+import UpdatePostInputType from './types/UpdatePostInputType'
 
 @Resolver(Post)
 export default class PostResolver {
@@ -90,17 +91,25 @@ export default class PostResolver {
 		return post.save()
 	}
 
-	@Mutation(() => Boolean, { nullable: true })
+	@Authorized()
+	@Mutation(() => Post, { nullable: true })
 	async updatePost(
 		@Arg('id') id: string,
-		@Arg('data') createPostData: CreatePostInputType
-	): Promise<boolean> {
-		try {
-			await Post.update(id, { ...createPostData })
-			return true
-		} catch {
-			return false
-		}
+		@Arg('data') updatePostData: UpdatePostInputType,
+		@Ctx() { req }: Context
+	): Promise<Post> {
+		const { raw } = await getConnection()
+			.createQueryBuilder()
+			.update(Post)
+			.set({ ...updatePostData })
+			.where('id = :id and "authorId" = :authorId', {
+				id,
+				authorId: req.session.userId
+			})
+			.returning('*')
+			.execute()
+
+		return raw[0]
 	}
 
 	@Mutation(() => Boolean)

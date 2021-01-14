@@ -1,17 +1,17 @@
-import { Button, Text, Box } from '@chakra-ui/react'
-import { Formik, Form } from 'formik'
+import { Box, Button, Text } from '@chakra-ui/react'
+import { Form, Formik } from 'formik'
 import { NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
 import React, { useState } from 'react'
+import Field from '../../components/Field'
+import Layout from '../../components/Layout'
 import {
-	MeQuery,
 	MeDocument,
+	MeQuery,
 	useChangePasswordMutation
 } from '../../generated/graphql'
 import { withApollo } from '../../lib/apollo/withApollo'
 import errorMap from '../../lib/util/errorMap'
-import Field from '../../components/Field'
-import Layout from '../../components/Layout'
 
 const ForgotPassword: NextPage = () => {
 	const router = useRouter()
@@ -51,7 +51,7 @@ const ForgotPassword: NextPage = () => {
 						}
 					}}
 				>
-					{({ values, handleChange, isSubmitting }) => (
+					{() => (
 						<Form>
 							<Field
 								name="newPassword"
