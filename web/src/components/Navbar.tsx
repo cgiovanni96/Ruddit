@@ -23,7 +23,7 @@ const Navbar: React.FC = ({}) => {
 	} else if (!data?.me) {
 		rightMenu = (
 			<>
-				<RouterLink href="/login">
+				<RouterLink href={'/login'}>
 					<Link>
 						<Button
 							variant={'solid'}
@@ -36,7 +36,7 @@ const Navbar: React.FC = ({}) => {
 						</Button>
 					</Link>
 				</RouterLink>
-				<RouterLink href="/register">
+				<RouterLink href={'/register'}>
 					<Link ml={4}>
 						<Text fontSize={'lg'}>Register</Text>
 					</Link>
@@ -65,7 +65,9 @@ const Navbar: React.FC = ({}) => {
 	return (
 		<Flex p={4} mb={4} boxShadow={'md'} alignItems={'center'}>
 			<Heading as={'h1'} size={'lg'} color={'blue.800'}>
-				RUDDIT
+				<RouterLink href={'/'}>
+					<Link>Ruddit</Link>
+				</RouterLink>
 			</Heading>
 			<Spacer />
 			<Flex alignItems={'center'}>{rightMenu}</Flex>

@@ -151,6 +151,8 @@ export type LoginInputType = {
   password: Scalars['String'];
 };
 
+export type PostFieldsFragment = { __typename?: 'Post', id: string, title: string, text: string, createdAt: string, points: number, voteStatus?: Maybe<number>, author: { __typename?: 'User', id: string, name: string } };
+
 export type PostSnippetFieldsFragment = { __typename?: 'Post', id: string, title: string, textSnippet: string, createdAt: string, points: number, voteStatus?: Maybe<number>, author: { __typename?: 'User', id: string, name: string } };
 
 export type UserErrorFieldsFragment = { __typename?: 'FieldError', field: string, message: string };
@@ -231,6 +233,16 @@ export type MeQuery = { __typename?: 'Query', me?: Maybe<(
     & UserFieldsFragment
   )> };
 
+export type PostQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type PostQuery = { __typename?: 'Query', post?: Maybe<(
+    { __typename?: 'Post' }
+    & PostFieldsFragment
+  )> };
+
 export type PostsQueryVariables = Exact<{
   limit: Scalars['Int'];
   cursor?: Maybe<Scalars['String']>;
@@ -242,6 +254,20 @@ export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'Paginate
       & PostSnippetFieldsFragment
     )> } };
 
+export const PostFieldsFragmentDoc = gql`
+    fragment PostFields on Post {
+  id
+  title
+  text
+  createdAt
+  points
+  voteStatus
+  author {
+    id
+    name
+  }
+}
+    `;
 export const PostSnippetFieldsFragmentDoc = gql`
     fragment PostSnippetFields on Post {
   id
@@ -534,6 +560,39 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const PostDocument = gql`
+    query Post($id: String!) {
+  post(id: $id) {
+    ...PostFields
+  }
+}
+    ${PostFieldsFragmentDoc}`;
+
+/**
+ * __usePostQuery__
+ *
+ * To run a query within a React component, call `usePostQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePostQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function usePostQuery(baseOptions: Apollo.QueryHookOptions<PostQuery, PostQueryVariables>) {
+        return Apollo.useQuery<PostQuery, PostQueryVariables>(PostDocument, baseOptions);
+      }
+export function usePostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PostQuery, PostQueryVariables>) {
+          return Apollo.useLazyQuery<PostQuery, PostQueryVariables>(PostDocument, baseOptions);
+        }
+export type PostQueryHookResult = ReturnType<typeof usePostQuery>;
+export type PostLazyQueryHookResult = ReturnType<typeof usePostLazyQuery>;
+export type PostQueryResult = Apollo.QueryResult<PostQuery, PostQueryVariables>;
 export const PostsDocument = gql`
     query Posts($limit: Int!, $cursor: String) {
   posts(limit: $limit, cursor: $cursor) {
