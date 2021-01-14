@@ -4,6 +4,7 @@ fragment PostSnippetFields on Post {
 	textSnippet
 	createdAt
 	points
+	voteStatus
 	author {
 		id
 		name

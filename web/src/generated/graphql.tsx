@@ -48,6 +48,7 @@ export type Post = {
   title: Scalars['String'];
   text: Scalars['String'];
   points: Scalars['Float'];
+  voteStatus?: Maybe<Scalars['Int']>;
   authorId: Scalars['String'];
   author: User;
   textSnippet: Scalars['String'];
@@ -150,7 +151,7 @@ export type LoginInputType = {
   password: Scalars['String'];
 };
 
-export type PostSnippetFieldsFragment = { __typename?: 'Post', id: string, title: string, textSnippet: string, createdAt: string, points: number, author: { __typename?: 'User', id: string, name: string } };
+export type PostSnippetFieldsFragment = { __typename?: 'Post', id: string, title: string, textSnippet: string, createdAt: string, points: number, voteStatus?: Maybe<number>, author: { __typename?: 'User', id: string, name: string } };
 
 export type UserErrorFieldsFragment = { __typename?: 'FieldError', field: string, message: string };
 
@@ -248,6 +249,7 @@ export const PostSnippetFieldsFragmentDoc = gql`
   textSnippet
   createdAt
   points
+  voteStatus
   author {
     id
     name

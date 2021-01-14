@@ -41,7 +41,7 @@ export default class VoteResolver {
 					userId,
 					postId
 				},
-				{ value: factoredValue }
+				{ value }
 			)
 		}
 

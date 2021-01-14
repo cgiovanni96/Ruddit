@@ -1,14 +1,14 @@
-import React from 'react'
-import { Flex, IconButton, Text } from '@chakra-ui/react'
+import { gql } from '@apollo/client'
 import {
-	ChevronUpIcon as UpvoteIcon,
-	ChevronDownIcon as DownvoteIcon
+	ChevronDownIcon as DownvoteIcon,
+	ChevronUpIcon as UpvoteIcon
 } from '@chakra-ui/icons'
+import { Flex, IconButton, Text } from '@chakra-ui/react'
+import React, { useState } from 'react'
 import {
 	PostSnippetFieldsFragment,
 	useVoteMutation
 } from '../../generated/graphql'
-import { gql } from '@apollo/client'
 
 interface UpvoteProps {
 	post: PostSnippetFieldsFragment
@@ -17,20 +17,25 @@ interface UpvoteProps {
 type VotedPostFragment = {
 	id: string
 	points: number
+	voteStatus: number
 }
 
 const votingFragment = gql`
 	fragment _ on Post {
 		id
 		points
+		voteStatus
 	}
 `
 
-const Upvote: React.FC<UpvoteProps> = ({ post }) => {
+const Vote: React.FC<UpvoteProps> = ({ post }) => {
 	const [vote] = useVoteMutation()
+	const [loading, setLoading] = useState<
+		'upvote-loading' | 'downvote-loading' | 'not-loading'
+	>('not-loading')
 
-	const voteOnClick = (value: number) => {
-		vote({
+	const voteOnClick = async (value: number) => {
+		await vote({
 			variables: { postId: post.id, value },
 			update: (cache) => {
 				const postId = 'Post:' + post.id
@@ -40,10 +45,14 @@ const Upvote: React.FC<UpvoteProps> = ({ post }) => {
 				})
 
 				if (data) {
+					if (data.voteStatus === value) return
+					const factor = !data.voteStatus ? 1 : 2
+					const factorizedValue = data.points + factor * value
+
 					cache.writeFragment({
 						id: postId,
 						fragment: votingFragment,
-						data: { points: value }
+						data: { points: factorizedValue, voteStatus: value }
 					})
 				}
 			}
@@ -60,16 +69,32 @@ const Upvote: React.FC<UpvoteProps> = ({ post }) => {
 			<IconButton
 				icon={<UpvoteIcon boxSize={'24px'} color={'gray.800'} />}
 				aria-label={'Upvote post'}
-				onClick={() => voteOnClick(1)}
+				colorScheme={post.voteStatus === 1 ? 'orange' : undefined}
+				onClick={async () => {
+					if (post.voteStatus === 1) return
+					setLoading('upvote-loading')
+					await voteOnClick(1)
+					setLoading('not-loading')
+				}}
+				isLoading={loading === 'upvote-loading'}
 			/>
-			<Text color={'gray.800'}> {post.points} </Text>
+			<Text my={2} color={'gray.800'}>
+				{post.points}
+			</Text>
 			<IconButton
 				icon={<DownvoteIcon boxSize={'24px'} color={'gray.800'} />}
 				aria-label={'Upvote post'}
-				onClick={() => voteOnClick(-1)}
+				colorScheme={post.voteStatus === -1 ? 'red' : undefined}
+				onClick={async () => {
+					if (post.voteStatus === -1) return
+					setLoading('downvote-loading')
+					await voteOnClick(-1)
+					setLoading('not-loading')
+				}}
+				isLoading={loading === 'downvote-loading'}
 			/>
 		</Flex>
 	)
 }
 
-export default Upvote
+export default Vote
