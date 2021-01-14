@@ -55,7 +55,7 @@ const Index: React.FC = () => {
 							mt={8}
 							p={4}
 							rounded={'lg'}
-							bgColor={'green.300'}
+							bgColor={'gray.900'}
 						>
 							<Flex>
 								<Vote post={p} />

@@ -69,7 +69,7 @@ const Vote: React.FC<UpvoteProps> = ({ post }) => {
 			<IconButton
 				icon={<UpvoteIcon boxSize={'24px'} color={'gray.800'} />}
 				aria-label={'Upvote post'}
-				colorScheme={post.voteStatus === 1 ? 'orange' : undefined}
+				colorScheme={post.voteStatus === 1 ? 'green' : undefined}
 				onClick={async () => {
 					if (post.voteStatus === 1) return
 					setLoading('upvote-loading')

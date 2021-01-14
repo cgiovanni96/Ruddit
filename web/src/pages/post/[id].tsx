@@ -23,7 +23,7 @@ const Post: React.FC = ({}) => {
 
 	return (
 		<Layout>
-			<Box mt={6} p={4} color={'blue.800'}>
+			<Box mt={6} p={8} bgColor={'gray.900'} rounded={'lg'}>
 				<Flex flexDir={'column'}>
 					<Heading as={'h2'}>{data.post?.title}</Heading>
 					<Box>

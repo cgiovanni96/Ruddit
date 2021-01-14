@@ -13,7 +13,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
 			<Flex>
 				<RouterLink href={'post/[id]'} as={`post/${post.id}`}>
 					<Link>
-						<Heading as={'h3'} size={'lg'} color={'gray.800'}>
+						<Heading as={'h3'} size={'lg'}>
 							{post.title}
 						</Heading>
 					</Link>
@@ -24,9 +24,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
 				</Text>
 			</Flex>
 			<Spacer mt={2} />
-			<Text fontSize={'md'} color={'gray.800'}>
-				{post.textSnippet}&hellip;
-			</Text>
+			<Text fontSize={'md'}>{post.textSnippet}&hellip;</Text>
 		</Box>
 	)
 }
