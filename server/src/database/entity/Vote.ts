@@ -26,7 +26,7 @@ export default class Vote extends BaseEntity {
 	@Field()
 	postId: string
 
-	@ManyToOne(() => Post, (post) => post.votes)
+	@ManyToOne(() => Post, (post) => post.votes, { onDelete: 'CASCADE' })
 	@Field(() => Post)
 	post: Post
 
