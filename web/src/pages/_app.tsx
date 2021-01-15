@@ -1,5 +1,5 @@
 import { ChakraProvider, ColorModeProvider } from '@chakra-ui/react'
-
+import '../styles/css/react-mde-all.css'
 import theme from '../theme'
 
 function MyApp({ Component, pageProps }: any): JSX.Element {

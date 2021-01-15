@@ -2,6 +2,8 @@ import { Box, Flex, Heading, Link, Spacer, Text } from '@chakra-ui/react'
 import RouterLink from 'next/link'
 import React from 'react'
 import { PostSnippetFieldsFragment } from '../../generated/graphql'
+import mdConverter from '../../lib/util/mdConverter'
+import TextMd from '../TextMd'
 import ActionMenu from './ActionMenu'
 
 interface PostProps {
@@ -29,7 +31,9 @@ const Post: React.FC<PostProps> = ({ post, loggedUserId }) => {
 				by {post.author.name}
 			</Text>
 			<Spacer mt={2} />
-			<Text fontSize={'md'}>{post.textSnippet}&hellip;</Text>
+			<Text fontSize={'md'}>
+				<TextMd text={post.textSnippet} snippet />
+			</Text>
 		</Box>
 	)
 }

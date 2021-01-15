@@ -1,6 +1,7 @@
 import { Box, Flex, Heading, Text } from '@chakra-ui/react'
 import React from 'react'
 import Layout from '../../components/Layout'
+import TextMd from '../../components/TextMd'
 import { usePostQuery } from '../../generated/graphql'
 import { withApollo } from '../../lib/apollo/withApollo'
 import useGetId from '../../lib/hook/useGetId'
@@ -27,7 +28,9 @@ const Post: React.FC = ({}) => {
 				<Flex flexDir={'column'}>
 					<Heading as={'h2'}>{data.post.title}</Heading>
 					<Box>
-						<Text>{data.post.text}</Text>
+						<Text>
+							<TextMd text={data.post.text} />
+						</Text>
 					</Box>
 				</Flex>
 			</Box>
