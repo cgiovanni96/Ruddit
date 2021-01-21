@@ -13,6 +13,7 @@ import {
 import { getConnection } from 'typeorm'
 import Context from '../../app/server/context'
 import Post from '../../database/entity/Post'
+import Subruddit from '../../database/entity/Subruddit'
 import User from '../../database/entity/User'
 import PaginatedPostsResponse from '../../database/schema/response/PaginatedPostsResponse'
 // import userId from '../../database/userId'
@@ -25,6 +26,11 @@ export default class PostResolver {
 	@FieldResolver(() => User)
 	author(@Root() post: Post, @Ctx() { loaders }: Context) {
 		return loaders.userLoader.load(post.authorId)
+	}
+
+	@FieldResolver(() => Subruddit)
+	subruddit(@Root() post: Post, @Ctx() { loaders }: Context) {
+		return loaders.subrudditLoader.load(post.subrudditId)
 	}
 
 	@FieldResolver(() => Int, { nullable: true })

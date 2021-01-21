@@ -5,9 +5,11 @@ import {
 	CreateDateColumn,
 	Entity,
 	ManyToOne,
+	OneToMany,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn
 } from 'typeorm'
+import Post from './Post'
 import User from './User'
 
 @Entity()
@@ -29,17 +31,20 @@ export default class Subruddit extends BaseEntity {
 	@Field()
 	slug: string
 
-	@CreateDateColumn()
-	@Field()
-	createdAt: string
-
 	@Column()
 	@Field()
 	adminId: string
 
-	@ManyToOne(() => User)
+	@ManyToOne(() => User, (user) => user.id)
 	@Field()
 	admin: User
+
+	@OneToMany(() => Post, (post) => post.subrudditId)
+	posts: Post[]
+
+	@CreateDateColumn()
+	@Field()
+	createdAt: string
 
 	@UpdateDateColumn()
 	@Field()

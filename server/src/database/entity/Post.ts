@@ -12,6 +12,7 @@ import { Field, Int, ObjectType } from 'type-graphql'
 import User from './User'
 import truncateString from '../../app/util/truncateString'
 import Vote from './Vote'
+import Subruddit from './Subruddit'
 
 @Entity()
 @ObjectType()
@@ -42,6 +43,14 @@ export default class Post extends BaseEntity {
 	@ManyToOne(() => User)
 	@Field()
 	author: User
+
+	@Column()
+	@Field()
+	subrudditId: string
+
+	@ManyToOne(() => Subruddit)
+	@Field()
+	subruddit: Subruddit
 
 	@OneToMany(() => Vote, (vote) => vote.post)
 	votes: Vote[]
