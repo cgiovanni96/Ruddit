@@ -2,10 +2,15 @@ import { define } from 'typeorm-seeding'
 import * as Faker from 'faker'
 import Post from '../entity/Post'
 import log from '../../app/util/log'
-import userId from '../userId'
 import randomDate from '../../app/util/randomDate'
+import randomUserId from './util/randomUserId'
+import randomSubId from './util/randomSubId'
 
-define(Post, (faker: typeof Faker) => {
+define(Post, (
+	faker: typeof Faker,
+	context?: { authorsIds: string[]; subrudditsIds: string[] }
+) => {
+	console.log('PostFactory')
 	const title = faker.lorem.sentence()
 	const text = faker.lorem.paragraphs(2)
 
@@ -13,7 +18,8 @@ define(Post, (faker: typeof Faker) => {
 	const post = new Post()
 	post.title = title
 	post.text = text
-	post.authorId = userId
+	post.authorId = randomUserId(context?.authorsIds)
+	post.subrudditId = randomSubId(context?.subrudditsIds)
 	post.createdAt = randomDate(new Date(2020, 0, 1), new Date())
 
 	log(
