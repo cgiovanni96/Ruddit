@@ -6,8 +6,7 @@ import cors from 'cors'
 import session, { redis } from './redis'
 import build from '../schema/build'
 import Context from './context'
-import userLoader from '../loader/userLoader'
-import voteLoader from '../loader/voteLoader'
+import { loaders } from './loaders'
 
 export default async (emitSchema: boolean = false, PORT: string) => {
 	void createConnection()
@@ -20,11 +19,6 @@ export default async (emitSchema: boolean = false, PORT: string) => {
 		})
 	)
 	app.use(session)
-
-	const loaders = {
-		userLoader: userLoader(),
-		voteLoader: voteLoader()
-	}
 
 	const server = new ApolloServer({
 		schema: await build(emitSchema),

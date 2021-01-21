@@ -12,7 +12,7 @@ import Context from '../../app/server/context'
 import Subruddit from '../../database/entity/Subruddit'
 import CreateSubrudditInputType from './types/CreateSubrudditInputType'
 
-@Resolver()
+@Resolver(Subruddit)
 export default class SubrudditResolver {
 	@FieldResolver()
 	admin(@Root() subruddit: Subruddit, @Ctx() { loaders }: Context) {

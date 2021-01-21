@@ -4,8 +4,15 @@
 # -----------------------------------------------
 
 input CreatePostInputType {
+  subrudditId: String!
   text: String!
   title: String!
+}
+
+input CreateSubrudditInputType {
+  description: String!
+  name: String!
+  slug: String!
 }
 
 """
@@ -27,6 +34,7 @@ input LoginInputType {
 type Mutation {
   changePassword(newPassword: String!, token: String!): UserResponse!
   createPost(data: CreatePostInputType!): Post
+  createSubruddit(data: CreateSubrudditInputType!): Subruddit
   deletePost(id: String!): Boolean!
   forgotPassword(email: String!): Boolean!
   login(data: LoginInputType!): UserResponse!
@@ -47,6 +55,8 @@ type Post {
   createdAt: String!
   id: String!
   points: Float!
+  subruddit: Subruddit!
+  subrudditId: String!
   text: String!
   textSnippet: String!
   title: String!
@@ -60,6 +70,18 @@ type Query {
   me: User
   post(id: String!): Post
   posts(cursor: String, limit: Int!): PaginatedPostsResponse!
+  subruddits: [Subruddit!]!
+}
+
+type Subruddit {
+  admin: User!
+  adminId: String!
+  createdAt: String!
+  description: String!
+  id: String!
+  name: String!
+  slug: String!
+  updatedAt: String!
 }
 
 input UpdatePostInputType {

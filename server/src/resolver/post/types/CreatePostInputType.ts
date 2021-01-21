@@ -7,4 +7,7 @@ export default class CreatePostInputType {
 
 	@Field({ nullable: false })
 	text: string
+
+	@Field({ nullable: false })
+	subrudditId: string
 }

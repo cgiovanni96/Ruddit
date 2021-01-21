@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { Redis } from 'ioredis'
-import Loaders from './loaders'
+import { Loaders } from './loaders'
 
 type Session = {
 	userId?: string | undefined
