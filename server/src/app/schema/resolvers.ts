@@ -4,6 +4,7 @@ import BaseResolver from '../../resolver/base'
 import AuthResolver from '../../resolver/user/auth'
 import ForgotPasswordResolver from '../../resolver/user/forgotPassword'
 import VoteResolver from '../../resolver/vote'
+import SubrudditResolver from '../../resolver/subruddit'
 
 // NonEmptyArray is the type accepted by type-graphql's BuildSchemaOptions for the resolvers array
 // it could also be casted as a const, but this way is more consistent with the library.
@@ -14,5 +15,6 @@ export default [
 	PostResolver,
 	AuthResolver,
 	ForgotPasswordResolver,
-	VoteResolver
+	VoteResolver,
+	SubrudditResolver
 ] as ResolverArray
