@@ -1,10 +1,24 @@
-import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql'
+import {
+	Arg,
+	Authorized,
+	Ctx,
+	FieldResolver,
+	Mutation,
+	Query,
+	Resolver,
+	Root
+} from 'type-graphql'
 import Context from '../../app/server/context'
 import Subruddit from '../../database/entity/Subruddit'
 import CreateSubrudditInputType from './types/CreateSubrudditInputType'
 
 @Resolver()
 export default class SubrudditResolver {
+	@FieldResolver()
+	admin(@Root() subruddit: Subruddit, @Ctx() { loaders }: Context) {
+		return loaders.userLoader.load(subruddit.adminId)
+	}
+
 	@Query(() => [Subruddit])
 	async subruddits() {
 		return Subruddit.find()

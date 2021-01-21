@@ -24,7 +24,7 @@ import UpdatePostInputType from './types/UpdatePostInputType'
 export default class PostResolver {
 	@FieldResolver(() => User)
 	author(@Root() post: Post, @Ctx() { loaders }: Context) {
-		return loaders.authorLoader.load(post.authorId)
+		return loaders.userLoader.load(post.authorId)
 	}
 
 	@FieldResolver(() => Int, { nullable: true })

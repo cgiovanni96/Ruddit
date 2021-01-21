@@ -1,14 +1,14 @@
 import { Request, Response } from 'express'
 import { Redis } from 'ioredis'
 import voteLoader from '../loader/voteLoader'
-import authorLoader from '../loader/authorLoader'
+import userLoader from '../loader/userLoader'
 
 type Session = {
 	userId?: string | undefined
 }
 
 type Loaders = {
-	authorLoader: ReturnType<typeof authorLoader>
+	userLoader: ReturnType<typeof userLoader>
 	voteLoader: ReturnType<typeof voteLoader>
 }
 
