@@ -16,7 +16,6 @@ import Post from '../../database/entity/Post'
 import Subruddit from '../../database/entity/Subruddit'
 import User from '../../database/entity/User'
 import PaginatedPostsResponse from '../../database/schema/response/PaginatedPostsResponse'
-// import userId from '../../database/userId'
 import CreatePostInputType from './types/CreatePostInputType'
 import PaginationArgumentsType from './types/PaginationArgumentsType'
 import UpdatePostInputType from './types/UpdatePostInputType'
@@ -103,19 +102,27 @@ export default class PostResolver {
 		@Arg('id') id: string,
 		@Arg('data') updatePostData: UpdatePostInputType,
 		@Ctx() { req }: Context
-	): Promise<Post> {
-		const { raw } = await getConnection()
-			.createQueryBuilder()
-			.update(Post)
-			.set({ ...updatePostData })
-			.where('id = :id and "authorId" = :authorId', {
-				id,
-				authorId: req.session.userId
-			})
-			.returning('*')
-			.execute()
+	): Promise<Post | undefined> {
+		const postToUpdate = await Post.findOne(id, { relations: ['subruddit'] })
+		if (!postToUpdate) return undefined
+		const isAdmin =
+			postToUpdate.subruddit.adminId === req.session.userId ? true : false
+		const isAuthor = postToUpdate.authorId === req.session.userId ? true : false
 
-		return raw[0]
+		if (isAdmin || isAuthor) {
+			const { raw } = await getConnection()
+				.createQueryBuilder()
+				.update(Post)
+				.set({ ...updatePostData })
+				.where('id = :id', {
+					id
+				})
+				.returning('*')
+				.execute()
+			return raw[0]
+		} else {
+			return undefined
+		}
 	}
 
 	@Mutation(() => Boolean)
