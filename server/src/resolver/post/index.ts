@@ -46,25 +46,31 @@ export default class PostResolver {
 
 	@Query(() => PaginatedPostsResponse)
 	async posts(
-		@Args() { limit, cursor }: PaginationArgumentsType
+		@Args() { limit, cursor, subrudditId }: PaginationArgumentsType
 	): Promise<PaginatedPostsResponse> {
 		const setLimit = Math.min(50, limit)
 		const limitPlusOne = limit + 1
 
-		const replacements: any[] = [limitPlusOne]
+		const cursorDate = cursor ? new Date(parseInt(cursor)) : null
 
-		if (cursor) replacements.push(new Date(parseInt(cursor)))
+		const qb = await getConnection().getRepository(Post).createQueryBuilder('p')
+		let flag = false
 
-		const posts = await getConnection().query(
-			`
-				select p.*
-				from post p
-				${cursor ? `where p."createdAt" < $2` : ''}
-				order by p."createdAt" DESC
-				limit $1
-			`,
-			replacements
-		)
+		if (subrudditId) {
+			flag = true
+			qb.where('p.subrudditId = :subrudditId', { subrudditId })
+		}
+
+		if (cursor) {
+			if (flag) qb.andWhere('p.createdAt = :cursorDate', { cursorDate })
+			else qb.where('p.createdAt = :cursorDate', { cursorDate })
+		}
+
+		qb.orderBy('p.createdAt', 'DESC')
+		qb.limit(limitPlusOne)
+		const posts = await qb.getMany()
+
+		console.log('POST: ', posts)
 
 		const res = {
 			posts: posts.slice(0, setLimit),

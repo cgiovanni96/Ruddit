@@ -7,4 +7,7 @@ export default class PaginationArgumentsType {
 
 	@Field(() => String, { nullable: true })
 	cursor: string | null
+
+	@Field(() => String, { nullable: true })
+	subrudditId: string
 }

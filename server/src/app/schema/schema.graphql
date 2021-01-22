@@ -69,7 +69,7 @@ type Query {
   hello: String!
   me: User
   post(id: String!): Post
-  posts(cursor: String, limit: Int!): PaginatedPostsResponse!
+  posts(cursor: String, limit: Int!, subrudditId: String): PaginatedPostsResponse!
   subruddits: [Subruddit!]!
 }
 
