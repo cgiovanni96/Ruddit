@@ -94,10 +94,18 @@ export default class PostResolver {
 		@Arg('data') createPostData: CreatePostInputType,
 		@Ctx() { req }: Context
 	): Promise<Post | null> {
+		const defaultSub =
+			!createPostData.subrudditId || createPostData.subrudditId === ''
+				? '407f980e-db50-4354-9c30-03dbf96c3da4'
+				: createPostData.subrudditId
+
 		const post = await Post.create({
-			...createPostData,
+			title: createPostData.title,
+			text: createPostData.text,
+			subrudditId: defaultSub,
 			authorId: req.session.userId
 		})
+
 		if (!post) return null
 		return post.save()
 	}

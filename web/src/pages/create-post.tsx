@@ -1,28 +1,50 @@
-import { Button, Spacer } from '@chakra-ui/react'
+import { Button, Select, Spacer } from '@chakra-ui/react'
 import { Form, Formik } from 'formik'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import Editor from '../components/Editor/Editor'
 import Field from '../components/Field'
 import Layout from '../components/Layout'
-import { useCreatePostMutation } from '../generated/graphql'
+import SelectSubruddits from '../components/SelectSubruddits'
+import { useCreatePostMutation, useSubrudditsQuery } from '../generated/graphql'
 import { withApollo } from '../lib/apollo/withApollo'
 import useIsAuthorized from '../lib/hook/useIsAuthorized'
 
-const CreatePost: React.FC = ({}) => {
+interface CreatePostProps {
+	subruddit?: string
+}
+
+const CreatePost: React.FC<CreatePostProps> = ({ subruddit }) => {
 	const [createPost] = useCreatePostMutation()
 	const router = useRouter()
+	const { error, loading, data } = useSubrudditsQuery()
+	const [postText, setPostText] = useState('')
 	useIsAuthorized()
 
-	const [postText, setPostText] = useState('')
+	if (error || !data) {
+		return <div> Error ...</div>
+	}
+	if (loading) {
+		return <div>Loading</div>
+	}
+
+	if (!data.subruddits) {
+		return <div>Subruddits not found</div>
+	}
 
 	return (
 		<Layout variant="regular">
 			<Formik
-				initialValues={{ title: '' }}
+				initialValues={{ title: '', subruddit: '' }}
 				onSubmit={async (values) => {
 					await createPost({
-						variables: { data: { title: values.title, text: postText } },
+						variables: {
+							data: {
+								title: values.title,
+								text: postText,
+								subrudditId: values.subruddit
+							}
+						},
 						update: (cache) => {
 							cache.evict({ fieldName: 'posts:{}' })
 						}
@@ -33,6 +55,8 @@ const CreatePost: React.FC = ({}) => {
 				{() => (
 					<Form>
 						<Field name="title" placeholder="Title" label="Title" />
+						<Spacer mt={6} />
+						<SelectSubruddits name="subruddit" subruddits={data.subruddits} />
 						<Spacer mt={6} />
 						<Editor value={postText} setValue={setPostText} />
 						<Spacer mt={6} />
