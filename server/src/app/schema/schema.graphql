@@ -4,7 +4,7 @@
 # -----------------------------------------------
 
 input CreatePostInputType {
-  subrudditId: String!
+  subrudditId: String = "407f980e-db50-4354-9c30-03dbf96c3da4"
   text: String!
   title: String!
 }

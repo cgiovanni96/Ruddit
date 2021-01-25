@@ -27,12 +27,12 @@ const Post: React.FC<PostProps> = ({ post, loggedUserId }) => {
 				) : null}
 			</Flex>
 			<Text size={'md'} color={'green.800'}>
-				by {post.author.name}
+				by {post.author.name} ~ in {post.subruddit.name}
 			</Text>
 			<Spacer mt={2} />
-			<Text fontSize={'md'}>
+			<Box fontSize={'md'}>
 				<TextMd text={post.textSnippet} snippet />
-			</Text>
+			</Box>
 		</Box>
 	)
 }

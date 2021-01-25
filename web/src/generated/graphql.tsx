@@ -23,12 +23,14 @@ export type Query = {
   post?: Maybe<Post>;
   hello: Scalars['String'];
   me?: Maybe<User>;
+  subruddits: Array<Subruddit>;
 };
 
 
 export type QueryPostsArgs = {
   limit: Scalars['Int'];
   cursor?: Maybe<Scalars['String']>;
+  subrudditId?: Maybe<Scalars['String']>;
 };
 
 
@@ -51,6 +53,8 @@ export type Post = {
   voteStatus?: Maybe<Scalars['Int']>;
   authorId: Scalars['String'];
   author: User;
+  subrudditId: Scalars['String'];
+  subruddit: Subruddit;
   textSnippet: Scalars['String'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
@@ -66,6 +70,18 @@ export type User = {
 };
 
 
+export type Subruddit = {
+  __typename?: 'Subruddit';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  description: Scalars['String'];
+  slug: Scalars['String'];
+  adminId: Scalars['String'];
+  admin: User;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createPost?: Maybe<Post>;
@@ -77,6 +93,7 @@ export type Mutation = {
   forgotPassword: Scalars['Boolean'];
   changePassword: UserResponse;
   vote: Scalars['Boolean'];
+  createSubruddit?: Maybe<Subruddit>;
 };
 
 
@@ -122,9 +139,15 @@ export type MutationVoteArgs = {
   postId: Scalars['String'];
 };
 
+
+export type MutationCreateSubrudditArgs = {
+  data: CreateSubrudditInputType;
+};
+
 export type CreatePostInputType = {
   title: Scalars['String'];
   text: Scalars['String'];
+  subrudditId?: Maybe<Scalars['String']>;
 };
 
 export type UpdatePostInputType = {
@@ -156,9 +179,15 @@ export type LoginInputType = {
   password: Scalars['String'];
 };
 
+export type CreateSubrudditInputType = {
+  name: Scalars['String'];
+  description: Scalars['String'];
+  slug: Scalars['String'];
+};
+
 export type PostFieldsFragment = { __typename?: 'Post', id: string, title: string, text: string, createdAt: string, points: number, voteStatus?: Maybe<number>, author: { __typename?: 'User', id: string, name: string } };
 
-export type PostSnippetFieldsFragment = { __typename?: 'Post', id: string, title: string, textSnippet: string, createdAt: string, points: number, voteStatus?: Maybe<number>, author: { __typename?: 'User', id: string, name: string } };
+export type PostSnippetFieldsFragment = { __typename?: 'Post', id: string, title: string, textSnippet: string, createdAt: string, points: number, voteStatus?: Maybe<number>, author: { __typename?: 'User', id: string, name: string }, subruddit: { __typename?: 'Subruddit', id: string, name: string } };
 
 export type UserErrorFieldsFragment = { __typename?: 'FieldError', field: string, message: string };
 
@@ -298,6 +327,10 @@ export const PostSnippetFieldsFragmentDoc = gql`
   points
   voteStatus
   author {
+    id
+    name
+  }
+  subruddit {
     id
     name
   }

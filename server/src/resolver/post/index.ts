@@ -70,8 +70,6 @@ export default class PostResolver {
 		qb.limit(limitPlusOne)
 		const posts = await qb.getMany()
 
-		console.log('POST: ', posts)
-
 		const res = {
 			posts: posts.slice(0, setLimit),
 			hasMore: posts.length === limitPlusOne
