@@ -1,0 +1,7 @@
+mutation CreateSubruddit($data: CreateSubrudditInputType!) {
+	createSubruddit(data: $data) {
+		id
+		name
+		description
+	}
+}

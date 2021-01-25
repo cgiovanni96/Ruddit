@@ -1,4 +1,4 @@
-import { Button, Select, Spacer } from '@chakra-ui/react'
+import { Button, Spacer } from '@chakra-ui/react'
 import { Form, Formik } from 'formik'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'

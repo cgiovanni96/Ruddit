@@ -1,0 +1,5 @@
+query Subruddit($id: String!) {
+	subruddit(id: $id) {
+		...SubrudditFields
+	}
+}

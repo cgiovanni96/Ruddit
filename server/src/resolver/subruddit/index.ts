@@ -24,6 +24,11 @@ export default class SubrudditResolver {
 		return Subruddit.find()
 	}
 
+	@Query(() => Subruddit)
+	async subruddit(@Arg('id') id: string) {
+		return Subruddit.findOne({ id })
+	}
+
 	@Mutation(() => Subruddit, { nullable: true })
 	@Authorized()
 	async createSubruddit(

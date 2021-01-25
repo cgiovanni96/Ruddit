@@ -28,6 +28,7 @@ export type Query = {
 	hello: Scalars['String']
 	me?: Maybe<User>
 	subruddits: Array<Subruddit>
+	subruddit: Subruddit
 }
 
 export type QueryPostsArgs = {
@@ -37,6 +38,10 @@ export type QueryPostsArgs = {
 }
 
 export type QueryPostArgs = {
+	id: Scalars['String']
+}
+
+export type QuerySubrudditArgs = {
 	id: Scalars['String']
 }
 
@@ -204,6 +209,7 @@ export type SubrudditFieldsFragment = {
 	__typename?: 'Subruddit'
 	id: string
 	name: string
+	description: string
 }
 
 export type UserErrorFieldsFragment = {
@@ -247,6 +253,20 @@ export type CreatePostMutation = {
 		text: string
 		authorId: string
 		points: number
+	}>
+}
+
+export type CreateSubrudditMutationVariables = Exact<{
+	data: CreateSubrudditInputType
+}>
+
+export type CreateSubrudditMutation = {
+	__typename?: 'Mutation'
+	createSubruddit?: Maybe<{
+		__typename?: 'Subruddit'
+		id: string
+		name: string
+		description: string
 	}>
 }
 
@@ -344,6 +364,15 @@ export type PostsQuery = {
 	}
 }
 
+export type SubrudditQueryVariables = Exact<{
+	id: Scalars['String']
+}>
+
+export type SubrudditQuery = {
+	__typename?: 'Query'
+	subruddit: { __typename?: 'Subruddit' } & SubrudditFieldsFragment
+}
+
 export type SubrudditsQueryVariables = Exact<{ [key: string]: never }>
 
 export type SubrudditsQuery = {
@@ -387,6 +416,7 @@ export const SubrudditFieldsFragmentDoc = gql`
 	fragment SubrudditFields on Subruddit {
 		id
 		name
+		description
 	}
 `
 export const UserErrorFieldsFragmentDoc = gql`
@@ -514,6 +544,56 @@ export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<
 	CreatePostMutation,
 	CreatePostMutationVariables
+>
+export const CreateSubrudditDocument = gql`
+	mutation CreateSubruddit($data: CreateSubrudditInputType!) {
+		createSubruddit(data: $data) {
+			id
+			name
+			description
+		}
+	}
+`
+export type CreateSubrudditMutationFn = Apollo.MutationFunction<
+	CreateSubrudditMutation,
+	CreateSubrudditMutationVariables
+>
+
+/**
+ * __useCreateSubrudditMutation__
+ *
+ * To run a mutation, you first call `useCreateSubrudditMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateSubrudditMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createSubrudditMutation, { data, loading, error }] = useCreateSubrudditMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateSubrudditMutation(
+	baseOptions?: Apollo.MutationHookOptions<
+		CreateSubrudditMutation,
+		CreateSubrudditMutationVariables
+	>
+) {
+	return Apollo.useMutation<
+		CreateSubrudditMutation,
+		CreateSubrudditMutationVariables
+	>(CreateSubrudditDocument, baseOptions)
+}
+export type CreateSubrudditMutationHookResult = ReturnType<
+	typeof useCreateSubrudditMutation
+>
+export type CreateSubrudditMutationResult = Apollo.MutationResult<CreateSubrudditMutation>
+export type CreateSubrudditMutationOptions = Apollo.BaseMutationOptions<
+	CreateSubrudditMutation,
+	CreateSubrudditMutationVariables
 >
 export const DeletePostDocument = gql`
 	mutation DeletePost($id: String!) {
@@ -970,6 +1050,58 @@ export type PostsLazyQueryHookResult = ReturnType<typeof usePostsLazyQuery>
 export type PostsQueryResult = Apollo.QueryResult<
 	PostsQuery,
 	PostsQueryVariables
+>
+export const SubrudditDocument = gql`
+	query Subruddit($id: String!) {
+		subruddit(id: $id) {
+			...SubrudditFields
+		}
+	}
+	${SubrudditFieldsFragmentDoc}
+`
+
+/**
+ * __useSubrudditQuery__
+ *
+ * To run a query within a React component, call `useSubrudditQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSubrudditQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSubrudditQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useSubrudditQuery(
+	baseOptions: Apollo.QueryHookOptions<SubrudditQuery, SubrudditQueryVariables>
+) {
+	return Apollo.useQuery<SubrudditQuery, SubrudditQueryVariables>(
+		SubrudditDocument,
+		baseOptions
+	)
+}
+export function useSubrudditLazyQuery(
+	baseOptions?: Apollo.LazyQueryHookOptions<
+		SubrudditQuery,
+		SubrudditQueryVariables
+	>
+) {
+	return Apollo.useLazyQuery<SubrudditQuery, SubrudditQueryVariables>(
+		SubrudditDocument,
+		baseOptions
+	)
+}
+export type SubrudditQueryHookResult = ReturnType<typeof useSubrudditQuery>
+export type SubrudditLazyQueryHookResult = ReturnType<
+	typeof useSubrudditLazyQuery
+>
+export type SubrudditQueryResult = Apollo.QueryResult<
+	SubrudditQuery,
+	SubrudditQueryVariables
 >
 export const SubrudditsDocument = gql`
 	query Subruddits {
