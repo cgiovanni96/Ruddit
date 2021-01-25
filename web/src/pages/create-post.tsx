@@ -1,7 +1,8 @@
 import { Button, Spacer } from '@chakra-ui/react'
 import { Form, Formik } from 'formik'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useState } from 'react'
+import Editor from '../components/Editor/Editor'
 import Field from '../components/Field'
 import Layout from '../components/Layout'
 import { useCreatePostMutation } from '../generated/graphql'
@@ -13,13 +14,15 @@ const CreatePost: React.FC = ({}) => {
 	const router = useRouter()
 	useIsAuthorized()
 
+	const [postText, setPostText] = useState('')
+
 	return (
-		<Layout variant="small">
+		<Layout variant="regular">
 			<Formik
-				initialValues={{ title: '', text: '' }}
+				initialValues={{ title: '' }}
 				onSubmit={async (values) => {
 					await createPost({
-						variables: { data: values },
+						variables: { data: { title: values.title, text: postText } },
 						update: (cache) => {
 							cache.evict({ fieldName: 'posts:{}' })
 						}
@@ -31,7 +34,7 @@ const CreatePost: React.FC = ({}) => {
 					<Form>
 						<Field name="title" placeholder="Title" label="Title" />
 						<Spacer mt={6} />
-						<Field name="text" isTextarea placeholder="Text" label="Text" />
+						<Editor value={postText} setValue={setPostText} />
 						<Spacer mt={6} />
 						<Button type="submit" mt={6} bgColor="red.500">
 							Create

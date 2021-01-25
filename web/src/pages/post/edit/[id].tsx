@@ -1,7 +1,8 @@
 import { Button, Spacer } from '@chakra-ui/react'
 import { Form, Formik } from 'formik'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useState } from 'react'
+import Editor from '../../../components/Editor/Editor'
 import Field from '../../../components/Field'
 import Layout from '../../../components/Layout'
 import { usePostQuery, useUpdatePostMutation } from '../../../generated/graphql'
@@ -15,6 +16,7 @@ const EditPost: React.FC = ({}) => {
 	const id = useGetId()
 	const { error, loading, data } = usePostQuery({ variables: { id } })
 	const [updatePost] = useUpdatePostMutation()
+	const [postText, setPostText] = useState(data?.post?.text || '')
 
 	if (error || !data) {
 		return <div>Error</div>
@@ -29,11 +31,13 @@ const EditPost: React.FC = ({}) => {
 	}
 
 	return (
-		<Layout variant="small">
+		<Layout variant="regular">
 			<Formik
 				initialValues={{ title: data.post.title, text: data.post.text }}
 				onSubmit={async (values) => {
-					await updatePost({ variables: { id, ...values } })
+					await updatePost({
+						variables: { id, title: values.title, text: postText }
+					})
 					router.back()
 				}}
 			>
@@ -41,7 +45,7 @@ const EditPost: React.FC = ({}) => {
 					<Form>
 						<Field name="title" placeholder="Title" label="Title" />
 						<Spacer mt={6} />
-						<Field name="text" isTextarea placeholder="Text" label="Text" />
+						<Editor value={postText} setValue={setPostText} />
 						<Spacer mt={6} />
 						<Button type="submit" mt={6} bgColor="red.500">
 							Edit
