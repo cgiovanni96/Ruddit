@@ -26,7 +26,8 @@ export default class SubrudditResolver {
 
 	@Query(() => Subruddit)
 	async subruddit(@Arg('slug') slug: string) {
-		return Subruddit.findOne({ where: { slug } })
+		const lowerCaseSlug = slug.toLowerCase()
+		return Subruddit.findOne({ where: { slug: lowerCaseSlug } })
 	}
 
 	@Mutation(() => Subruddit, { nullable: true })

@@ -1,6 +1,7 @@
 import { Field, ObjectType } from 'type-graphql'
 import {
 	BaseEntity,
+	BeforeInsert,
 	Column,
 	CreateDateColumn,
 	Entity,
@@ -49,4 +50,9 @@ export default class Subruddit extends BaseEntity {
 	@UpdateDateColumn()
 	@Field()
 	updatedAt: string
+
+	@BeforeInsert()
+	lowerCaseSlug() {
+		this.slug = this.slug.toLowerCase()
+	}
 }
