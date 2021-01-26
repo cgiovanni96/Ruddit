@@ -70,7 +70,7 @@ type Query {
   me: User
   post(id: String!): Post
   posts(cursor: String, limit: Int!, subrudditId: String): PaginatedPostsResponse!
-  subruddit(id: String!): Subruddit!
+  subruddit(slug: String!): Subruddit!
   subruddits: [Subruddit!]!
 }
 

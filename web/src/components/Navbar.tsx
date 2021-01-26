@@ -64,7 +64,14 @@ const Navbar: React.FC = ({}) => {
 		<Flex p={4} mb={4} boxShadow={'md'} alignItems={'center'}>
 			<Heading as={'h1'} size={'lg'} color={'blue.800'}>
 				<RouterLink href={'/'}>
-					<Link>Ruddit</Link>
+					<Link
+						onClick={() => {
+							apolloClient.resetStore()
+							apolloClient.cache.gc()
+						}}
+					>
+						Ruddit
+					</Link>
 				</RouterLink>
 			</Heading>
 			<Spacer />

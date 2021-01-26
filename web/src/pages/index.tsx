@@ -1,3 +1,4 @@
+import { useApolloClient } from '@apollo/client'
 import {
 	Box,
 	Button,
@@ -8,32 +9,40 @@ import {
 	Stack
 } from '@chakra-ui/react'
 import RouterLink from 'next/link'
+import React from 'react'
 import Layout from '../components/Layout'
 import Post from '../components/Post/Post'
 import Vote from '../components/Post/Vote'
-import { useMeQuery, usePostsQuery } from '../generated/graphql'
+import { usePostsQuery, useMeQuery } from '../generated/graphql'
 import { withApollo } from '../lib/apollo/withApollo'
 
 const Index: React.FC = () => {
+	const apolloClient = useApolloClient()
+
+	console.log('Cache', apolloClient.cache)
+
 	const { data, loading, fetchMore, variables } = usePostsQuery({
 		variables: {
 			limit: 2,
-			cursor: null
+			cursor: null,
+			subrudditId: null
 		},
 		notifyOnNetworkStatusChange: true
 	})
 
 	const { data: meData } = useMeQuery()
 
-	if (!loading && !data) {
-		return <div>Something happened</div>
+	if (!data || !data.posts) {
+		console.log('Hello')
+		return <div>Error</div>
 	}
 
 	const fetchMorePosts = () => {
 		fetchMore({
 			variables: {
 				limit: variables?.limit,
-				cursor: data?.posts.posts[data.posts.posts.length - 1].createdAt
+				cursor: data?.posts.posts[data.posts.posts.length - 1].createdAt,
+				subrudditId: variables?.subrudditId
 			}
 		})
 	}

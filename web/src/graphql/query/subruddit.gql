@@ -1,5 +1,5 @@
-query Subruddit($id: String!) {
-	subruddit(id: $id) {
+query Subruddit($slug: String!) {
+	subruddit(slug: $slug) {
 		...SubrudditFields
 	}
 }

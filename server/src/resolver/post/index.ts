@@ -19,7 +19,7 @@ import User from '../../database/entity/User'
 import PaginatedPostsResponse from '../../database/schema/response/PaginatedPostsResponse'
 import isAuthorOrAdmin from '../../middleware/isAuthorOrAdmin'
 import CreatePostInputType from './types/CreatePostInputType'
-import PaginationArgumentsType from './types/PaginationArgumentsType'
+import PostPaginationArguments from './types/PostPaginationArguments'
 import UpdatePostInputType from './types/UpdatePostInputType'
 
 @Resolver(Post)
@@ -46,8 +46,9 @@ export default class PostResolver {
 
 	@Query(() => PaginatedPostsResponse)
 	async posts(
-		@Args() { limit, cursor, subrudditId }: PaginationArgumentsType
+		@Args() paginatedPostData: PostPaginationArguments
 	): Promise<PaginatedPostsResponse> {
+		const { limit, cursor, subrudditId } = paginatedPostData
 		const setLimit = Math.min(50, limit)
 		const limitPlusOne = limit + 1
 
@@ -62,8 +63,9 @@ export default class PostResolver {
 		}
 
 		if (cursor) {
-			if (flag) qb.andWhere('p.createdAt = :cursorDate', { cursorDate })
-			else qb.where('p.createdAt = :cursorDate', { cursorDate })
+			console.log('cursor', cursor)
+			if (flag) qb.andWhere('p.createdAt < :cursorDate', { cursorDate })
+			else qb.where('p.createdAt < :cursorDate', { cursorDate })
 		}
 
 		qb.orderBy('p.createdAt', 'DESC')

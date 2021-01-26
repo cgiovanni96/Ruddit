@@ -25,8 +25,8 @@ export default class SubrudditResolver {
 	}
 
 	@Query(() => Subruddit)
-	async subruddit(@Arg('id') id: string) {
-		return Subruddit.findOne({ id })
+	async subruddit(@Arg('slug') slug: string) {
+		return Subruddit.findOne({ where: { slug } })
 	}
 
 	@Mutation(() => Subruddit, { nullable: true })

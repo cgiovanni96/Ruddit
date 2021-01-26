@@ -1,7 +1,7 @@
 import { ArgsType, Field, Int } from 'type-graphql'
 
 @ArgsType()
-export default class PaginationArgumentsType {
+export default class PostPaginationArguments {
 	@Field(() => Int)
 	limit: number
 
@@ -9,5 +9,5 @@ export default class PaginationArgumentsType {
 	cursor: string | null
 
 	@Field(() => String, { nullable: true })
-	subrudditId: string
+	subrudditId: string | null
 }

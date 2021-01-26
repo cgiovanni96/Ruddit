@@ -12,5 +12,6 @@ fragment PostSnippetFields on Post {
 	subruddit {
 		id
 		name
+		slug
 	}
 }

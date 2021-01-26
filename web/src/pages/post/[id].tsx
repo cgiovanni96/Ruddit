@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Text } from '@chakra-ui/react'
+import { Box, Flex, Heading } from '@chakra-ui/react'
 import React from 'react'
 import Layout from '../../components/Layout'
 import TextMd from '../../components/TextMd'
@@ -28,9 +28,9 @@ const Post: React.FC = ({}) => {
 				<Flex flexDir={'column'}>
 					<Heading as={'h2'}>{data.post.title}</Heading>
 					<Box>
-						<Text>
+						<Box>
 							<TextMd text={data.post.text} />
-						</Text>
+						</Box>
 					</Box>
 				</Flex>
 			</Box>

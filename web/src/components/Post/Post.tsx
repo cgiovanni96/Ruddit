@@ -27,7 +27,10 @@ const Post: React.FC<PostProps> = ({ post, loggedUserId }) => {
 				) : null}
 			</Flex>
 			<Text size={'md'} color={'green.800'}>
-				by {post.author.name} ~ in {post.subruddit.name}
+				by {post.author.name} ~ in{' '}
+				<RouterLink href={'s/[slug]'} as={`s/${post.subruddit.slug}`}>
+					<Link>{post.subruddit.name}</Link>
+				</RouterLink>
 			</Text>
 			<Spacer mt={2} />
 			<Box fontSize={'md'}>

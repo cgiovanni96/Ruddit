@@ -1,5 +1,5 @@
-query Posts($limit: Int!, $cursor: String) {
-	posts(limit: $limit, cursor: $cursor) {
+query Posts($limit: Int!, $cursor: String, $subrudditId: String) {
+	posts(limit: $limit, cursor: $cursor, subrudditId: $subrudditId) {
 		hasMore
 		posts {
 			...PostSnippetFields

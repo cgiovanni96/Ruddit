@@ -1,7 +1,7 @@
 import argon2 from 'argon2'
-import { isEmail } from 'class-validator'
 import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import Context from '../../app/server/context'
+import { isEmail } from '../../app/util/email'
 import User from '../../database/entity/User'
 import UserResponse from '../../database/schema/response/UserResponse'
 import {
