@@ -5,71 +5,55 @@ import Layout from '../../components/Layout'
 import Post from '../../components/Post/Post'
 import Vote from '../../components/Post/Vote'
 import TextMd from '../../components/TextMd'
-import {
-	useMeQuery,
-	usePostsQuery,
-	useSubrudditQuery
-} from '../../generated/graphql'
+import { useMeQuery, useSubrudditsPostsQuery } from '../../generated/graphql'
 import { withApollo } from '../../lib/apollo/withApollo'
-import subruddits from '../subruddits'
-// import useGetSlug from '../../lib/hook/useGetSlug'
+import useGetSlug from '../../lib/hook/useGetSlug'
 
 const Sub: React.FC = ({}) => {
-	// const slug = useGetSlug()
-
-	const router = useRouter()
-	const slug: string =
-		typeof router.query.slug === 'string' ? router.query.slug : ''
+	const slug = useGetSlug()
 	const { data: meData } = useMeQuery()
 
-	const {
-		loading: subrudditLoading,
-		error: subrudditError,
-		data: subrudditData
-	} = useSubrudditQuery({
-		variables: { slug }
-	})
-	// if (subrudditLoading) return <div>Loading...</div>
-	const {
-		loading: postLoading,
-		error: postError,
-		variables: postVariables,
-		fetchMore,
-		data: postData
-	} = usePostsQuery({
+	const query = useSubrudditsPostsQuery({
 		variables: {
 			limit: 10,
 			cursor: null,
-			subrudditId: subrudditData?.subruddit.id
+			subrudditSlug: slug
 		}
 	})
-	if (subrudditError || !subrudditData || !subrudditData.subruddit || !meData) {
+
+	if (!meData) {
 		return <div>Error...</div>
 	}
+
+	if (query.loading) {
+		return <div>Loading...</div>
+	}
+
+	if (query.error || !query.data) {
+		return <div>Error data ...</div>
+	}
+
+	const subruddit = query.data.posts.posts[0].subruddit
 
 	const fetchMorePosts = () => {
-		fetchMore({
+		query.fetchMore({
 			variables: {
-				limit: postVariables?.limit,
+				limit: query.variables?.limit,
 				cursor:
-					postData?.posts.posts[postData.posts.posts.length - 1].createdAt,
-				subrudditId: postVariables?.subrudditId
+					query.data?.posts.posts[query.data.posts.posts.length - 1].createdAt,
+				subrudditId: subruddit.id
 			}
 		})
-	}
-
-	if (postError || !postData) {
-		return <div>Error...</div>
 	}
 
 	return (
 		<Layout>
 			<Box mt={6} p={8} bgColor={'gray.900'} rounded={'lg'}>
 				<Flex flexDir={'column'}>
-					<Heading as={'h2'}>{subrudditData.subruddit.name}</Heading>
+					<Heading as={'h2'}>{subruddit.name}</Heading>
 					<Box>
 						<Box>
-							<TextMd text={subrudditData.subruddit.description} />
+							<TextMd text={subruddit.description} />
 						</Box>
 					</Box>
 				</Flex>
@@ -77,7 +61,7 @@ const Sub: React.FC = ({}) => {
 
 			<>
 				<Stack spacing={6}>
-					{postData.posts.posts.map((p) => {
+					{query.data.posts.posts.map((p) => {
 						return (
 							<Box
 								key={p.id}
@@ -95,11 +79,11 @@ const Sub: React.FC = ({}) => {
 						)
 					})}
 				</Stack>
-				{postData.posts.hasMore ? (
+				{query.data.posts.hasMore ? (
 					<Center mt={4}>
 						<Button
 							onClick={fetchMorePosts}
-							isLoading={postLoading}
+							isLoading={query.loading}
 							bgColor={'blue.400'}
 							colorScheme={'blue'}
 						>

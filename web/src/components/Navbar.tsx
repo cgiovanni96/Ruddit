@@ -64,17 +64,7 @@ const Navbar: React.FC = ({}) => {
 		<Flex p={4} mb={4} boxShadow={'md'} alignItems={'center'}>
 			<Heading as={'h1'} size={'lg'} color={'blue.800'}>
 				<RouterLink href={'/'}>
-					<Link
-						onClick={() => {
-							apolloClient.resetStore()
-							apolloClient.cache.evict({ fieldName: 'subruddits:{}' })
-							apolloClient.clearStore()
-							apolloClient.cache.reset()
-							apolloClient.cache.gc()
-						}}
-					>
-						Ruddit
-					</Link>
+					<Link>Ruddit</Link>
 				</RouterLink>
 			</Heading>
 			<Spacer />

@@ -46,9 +46,9 @@ export default class PostResolver {
 
 	@Query(() => PaginatedPostsResponse)
 	async posts(
-		@Args() paginatedPostData: PostPaginationArguments
+		@Args() { limit, cursor, subrudditSlug }: PostPaginationArguments
 	): Promise<PaginatedPostsResponse> {
-		const { limit, cursor, subrudditId } = paginatedPostData
+		console.log('Paginated Posts')
 		const setLimit = Math.min(50, limit)
 		const limitPlusOne = limit + 1
 
@@ -57,13 +57,19 @@ export default class PostResolver {
 		const qb = await getConnection().getRepository(Post).createQueryBuilder('p')
 		let flag = false
 
-		if (subrudditId) {
+		if (subrudditSlug) {
 			flag = true
-			qb.where('p.subrudditId = :subrudditId', { subrudditId })
+			const subruddit = await Subruddit.findOne({
+				where: { slug: subrudditSlug }
+			})
+			console.log('slug', subrudditSlug)
+			console.log('find subruddit', subruddit?.name)
+			if (subruddit)
+				qb.where('p.subrudditId = :subrudditId', { subrudditId: subruddit.id })
 		}
 
 		if (cursor) {
-			console.log('cursor', cursor)
+			console.log('there is a cursor')
 			if (flag) qb.andWhere('p.createdAt < :cursorDate', { cursorDate })
 			else qb.where('p.createdAt < :cursorDate', { cursorDate })
 		}
@@ -72,6 +78,7 @@ export default class PostResolver {
 		qb.limit(limitPlusOne)
 		const posts = await qb.getMany()
 
+		console.log('paginated posts', posts.length)
 		const res = {
 			posts: posts.slice(0, setLimit),
 			hasMore: posts.length === limitPlusOne

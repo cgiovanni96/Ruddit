@@ -9,5 +9,5 @@ export default class PostPaginationArguments {
 	cursor: string | null
 
 	@Field(() => String, { nullable: true })
-	subrudditId: string | null
+	subrudditSlug: string | null
 }

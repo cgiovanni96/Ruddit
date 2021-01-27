@@ -22,7 +22,7 @@ const createClient = (ctx: NextPageContext) =>
 				Query: {
 					fields: {
 						posts: {
-							keyArgs: [],
+							keyArgs: ['subrudditSlug'],
 							merge(
 								existing: PaginatedPostsResponse | undefined,
 								incoming: PaginatedPostsResponse

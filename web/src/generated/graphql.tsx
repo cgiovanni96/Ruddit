@@ -32,7 +32,7 @@ export type Query = {
 export type QueryPostsArgs = {
   limit: Scalars['Int'];
   cursor?: Maybe<Scalars['String']>;
-  subrudditId?: Maybe<Scalars['String']>;
+  subrudditSlug?: Maybe<Scalars['String']>;
 };
 
 
@@ -324,7 +324,7 @@ export type PostQuery = { __typename?: 'Query', post?: Maybe<(
 export type PostsQueryVariables = Exact<{
   limit: Scalars['Int'];
   cursor?: Maybe<Scalars['String']>;
-  subrudditId?: Maybe<Scalars['String']>;
+  subrudditSlug?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -342,6 +342,18 @@ export type SubrudditQuery = { __typename?: 'Query', subruddit: (
     { __typename?: 'Subruddit' }
     & SubrudditFieldsFragment
   ) };
+
+export type SubrudditsPostsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  cursor?: Maybe<Scalars['String']>;
+  subrudditSlug?: Maybe<Scalars['String']>;
+}>;
+
+
+export type SubrudditsPostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPostsResponse', hasMore: boolean, posts: Array<(
+      { __typename?: 'Post', subruddit: { __typename?: 'Subruddit', id: string, name: string, description: string } }
+      & PostSnippetFieldsFragment
+    )> } };
 
 export type SubrudditsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -816,8 +828,8 @@ export type PostQueryHookResult = ReturnType<typeof usePostQuery>;
 export type PostLazyQueryHookResult = ReturnType<typeof usePostLazyQuery>;
 export type PostQueryResult = Apollo.QueryResult<PostQuery, PostQueryVariables>;
 export const PostsDocument = gql`
-    query Posts($limit: Int!, $cursor: String, $subrudditId: String) {
-  posts(limit: $limit, cursor: $cursor, subrudditId: $subrudditId) {
+    query Posts($limit: Int!, $cursor: String, $subrudditSlug: String) {
+  posts(limit: $limit, cursor: $cursor, subrudditSlug: $subrudditSlug) {
     hasMore
     posts {
       ...PostSnippetFields
@@ -840,7 +852,7 @@ export const PostsDocument = gql`
  *   variables: {
  *      limit: // value for 'limit'
  *      cursor: // value for 'cursor'
- *      subrudditId: // value for 'subrudditId'
+ *      subrudditSlug: // value for 'subrudditSlug'
  *   },
  * });
  */
@@ -886,6 +898,49 @@ export function useSubrudditLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type SubrudditQueryHookResult = ReturnType<typeof useSubrudditQuery>;
 export type SubrudditLazyQueryHookResult = ReturnType<typeof useSubrudditLazyQuery>;
 export type SubrudditQueryResult = Apollo.QueryResult<SubrudditQuery, SubrudditQueryVariables>;
+export const SubrudditsPostsDocument = gql`
+    query SubrudditsPosts($limit: Int!, $cursor: String, $subrudditSlug: String) {
+  posts(limit: $limit, cursor: $cursor, subrudditSlug: $subrudditSlug) {
+    hasMore
+    posts {
+      ...PostSnippetFields
+      subruddit {
+        id
+        name
+        description
+      }
+    }
+  }
+}
+    ${PostSnippetFieldsFragmentDoc}`;
+
+/**
+ * __useSubrudditsPostsQuery__
+ *
+ * To run a query within a React component, call `useSubrudditsPostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSubrudditsPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSubrudditsPostsQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      cursor: // value for 'cursor'
+ *      subrudditSlug: // value for 'subrudditSlug'
+ *   },
+ * });
+ */
+export function useSubrudditsPostsQuery(baseOptions: Apollo.QueryHookOptions<SubrudditsPostsQuery, SubrudditsPostsQueryVariables>) {
+        return Apollo.useQuery<SubrudditsPostsQuery, SubrudditsPostsQueryVariables>(SubrudditsPostsDocument, baseOptions);
+      }
+export function useSubrudditsPostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SubrudditsPostsQuery, SubrudditsPostsQueryVariables>) {
+          return Apollo.useLazyQuery<SubrudditsPostsQuery, SubrudditsPostsQueryVariables>(SubrudditsPostsDocument, baseOptions);
+        }
+export type SubrudditsPostsQueryHookResult = ReturnType<typeof useSubrudditsPostsQuery>;
+export type SubrudditsPostsLazyQueryHookResult = ReturnType<typeof useSubrudditsPostsLazyQuery>;
+export type SubrudditsPostsQueryResult = Apollo.QueryResult<SubrudditsPostsQuery, SubrudditsPostsQueryVariables>;
 export const SubrudditsDocument = gql`
     query Subruddits($limit: Int!, $cursor: String) {
   subruddits(limit: $limit, cursor: $cursor) {

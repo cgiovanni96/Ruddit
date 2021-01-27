@@ -20,7 +20,7 @@ const Index: React.FC = () => {
 		variables: {
 			limit: 2,
 			cursor: null,
-			subrudditId: null
+			subrudditSlug: null
 		},
 		notifyOnNetworkStatusChange: true
 	})
@@ -36,7 +36,7 @@ const Index: React.FC = () => {
 			variables: {
 				limit: variables?.limit,
 				cursor: data?.posts.posts[data.posts.posts.length - 1].createdAt,
-				subrudditId: variables?.subrudditId
+				subrudditId: variables?.subrudditSlug
 			}
 		})
 	}
