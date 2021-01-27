@@ -23,7 +23,8 @@ export type Query = {
   post?: Maybe<Post>;
   hello: Scalars['String'];
   me?: Maybe<User>;
-  subruddits: Array<Subruddit>;
+  subruddits: PaginatedSubrudditsResponse;
+  easySubruddits: Array<Subruddit>;
   subruddit: Subruddit;
 };
 
@@ -37,6 +38,12 @@ export type QueryPostsArgs = {
 
 export type QueryPostArgs = {
   id: Scalars['String'];
+};
+
+
+export type QuerySubrudditsArgs = {
+  limit: Scalars['Int'];
+  cursor?: Maybe<Scalars['String']>;
 };
 
 
@@ -86,6 +93,12 @@ export type Subruddit = {
   admin: User;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
+};
+
+export type PaginatedSubrudditsResponse = {
+  __typename?: 'PaginatedSubrudditsResponse';
+  subruddits: Array<Subruddit>;
+  hasMore: Scalars['Boolean'];
 };
 
 export type Mutation = {
@@ -195,7 +208,7 @@ export type PostFieldsFragment = { __typename?: 'Post', id: string, title: strin
 
 export type PostSnippetFieldsFragment = { __typename?: 'Post', id: string, title: string, textSnippet: string, createdAt: string, points: number, voteStatus?: Maybe<number>, author: { __typename?: 'User', id: string, name: string }, subruddit: { __typename?: 'Subruddit', id: string, name: string, slug: string } };
 
-export type SubrudditFieldsFragment = { __typename?: 'Subruddit', id: string, name: string, description: string };
+export type SubrudditFieldsFragment = { __typename?: 'Subruddit', id: string, name: string, description: string, createdAt: string };
 
 export type UserErrorFieldsFragment = { __typename?: 'FieldError', field: string, message: string };
 
@@ -330,10 +343,21 @@ export type SubrudditQuery = { __typename?: 'Query', subruddit: (
     & SubrudditFieldsFragment
   ) };
 
-export type SubrudditsQueryVariables = Exact<{ [key: string]: never; }>;
+export type SubrudditsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  cursor?: Maybe<Scalars['String']>;
+}>;
 
 
-export type SubrudditsQuery = { __typename?: 'Query', subruddits: Array<(
+export type SubrudditsQuery = { __typename?: 'Query', subruddits: { __typename?: 'PaginatedSubrudditsResponse', hasMore: boolean, subruddits: Array<(
+      { __typename?: 'Subruddit' }
+      & SubrudditFieldsFragment
+    )> } };
+
+export type SubrudditsListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SubrudditsListQuery = { __typename?: 'Query', easySubruddits: Array<(
     { __typename?: 'Subruddit' }
     & SubrudditFieldsFragment
   )> };
@@ -376,6 +400,7 @@ export const SubrudditFieldsFragmentDoc = gql`
   id
   name
   description
+  createdAt
 }
     `;
 export const UserErrorFieldsFragmentDoc = gql`
@@ -862,9 +887,12 @@ export type SubrudditQueryHookResult = ReturnType<typeof useSubrudditQuery>;
 export type SubrudditLazyQueryHookResult = ReturnType<typeof useSubrudditLazyQuery>;
 export type SubrudditQueryResult = Apollo.QueryResult<SubrudditQuery, SubrudditQueryVariables>;
 export const SubrudditsDocument = gql`
-    query Subruddits {
-  subruddits {
-    ...SubrudditFields
+    query Subruddits($limit: Int!, $cursor: String) {
+  subruddits(limit: $limit, cursor: $cursor) {
+    subruddits {
+      ...SubrudditFields
+    }
+    hasMore
   }
 }
     ${SubrudditFieldsFragmentDoc}`;
@@ -881,10 +909,12 @@ export const SubrudditsDocument = gql`
  * @example
  * const { data, loading, error } = useSubrudditsQuery({
  *   variables: {
+ *      limit: // value for 'limit'
+ *      cursor: // value for 'cursor'
  *   },
  * });
  */
-export function useSubrudditsQuery(baseOptions?: Apollo.QueryHookOptions<SubrudditsQuery, SubrudditsQueryVariables>) {
+export function useSubrudditsQuery(baseOptions: Apollo.QueryHookOptions<SubrudditsQuery, SubrudditsQueryVariables>) {
         return Apollo.useQuery<SubrudditsQuery, SubrudditsQueryVariables>(SubrudditsDocument, baseOptions);
       }
 export function useSubrudditsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SubrudditsQuery, SubrudditsQueryVariables>) {
@@ -893,3 +923,35 @@ export function useSubrudditsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type SubrudditsQueryHookResult = ReturnType<typeof useSubrudditsQuery>;
 export type SubrudditsLazyQueryHookResult = ReturnType<typeof useSubrudditsLazyQuery>;
 export type SubrudditsQueryResult = Apollo.QueryResult<SubrudditsQuery, SubrudditsQueryVariables>;
+export const SubrudditsListDocument = gql`
+    query SubrudditsList {
+  easySubruddits {
+    ...SubrudditFields
+  }
+}
+    ${SubrudditFieldsFragmentDoc}`;
+
+/**
+ * __useSubrudditsListQuery__
+ *
+ * To run a query within a React component, call `useSubrudditsListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSubrudditsListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSubrudditsListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSubrudditsListQuery(baseOptions?: Apollo.QueryHookOptions<SubrudditsListQuery, SubrudditsListQueryVariables>) {
+        return Apollo.useQuery<SubrudditsListQuery, SubrudditsListQueryVariables>(SubrudditsListDocument, baseOptions);
+      }
+export function useSubrudditsListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SubrudditsListQuery, SubrudditsListQueryVariables>) {
+          return Apollo.useLazyQuery<SubrudditsListQuery, SubrudditsListQueryVariables>(SubrudditsListDocument, baseOptions);
+        }
+export type SubrudditsListQueryHookResult = ReturnType<typeof useSubrudditsListQuery>;
+export type SubrudditsListLazyQueryHookResult = ReturnType<typeof useSubrudditsListLazyQuery>;
+export type SubrudditsListQueryResult = Apollo.QueryResult<SubrudditsListQuery, SubrudditsListQueryVariables>;

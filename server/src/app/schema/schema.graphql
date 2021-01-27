@@ -49,6 +49,11 @@ type PaginatedPostsResponse {
   posts: [Post!]!
 }
 
+type PaginatedSubrudditsResponse {
+  hasMore: Boolean!
+  subruddits: [Subruddit!]!
+}
+
 type Post {
   author: User!
   authorId: String!
@@ -66,12 +71,13 @@ type Post {
 
 type Query {
   easyPosts: [Post!]!
+  easySubruddits: [Subruddit!]!
   hello: String!
   me: User
   post(id: String!): Post
   posts(cursor: String, limit: Int!, subrudditId: String): PaginatedPostsResponse!
   subruddit(slug: String!): Subruddit!
-  subruddits: [Subruddit!]!
+  subruddits(cursor: String, limit: Int!): PaginatedSubrudditsResponse!
 }
 
 type Subruddit {

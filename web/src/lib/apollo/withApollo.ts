@@ -1,7 +1,11 @@
 import { createWithApollo } from './createWithApollo.js'
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { NextPageContext } from 'next'
-import { PaginatedPostsResponse } from '../../generated/graphql'
+import {
+	PaginatedPostsResponse,
+	PaginatedSubrudditsResponse
+} from '../../generated/graphql'
+import { IncomingMessage } from 'http'
 
 const createClient = (ctx: NextPageContext) =>
 	new ApolloClient({
@@ -26,6 +30,21 @@ const createClient = (ctx: NextPageContext) =>
 								return {
 									...incoming,
 									posts: [...(existing?.posts || []), ...incoming.posts]
+								}
+							}
+						},
+						subruddits: {
+							keyArgs: [],
+							merge(
+								existing: PaginatedSubrudditsResponse | undefined,
+								incoming: PaginatedSubrudditsResponse
+							): PaginatedSubrudditsResponse {
+								return {
+									...incoming,
+									subruddits: [
+										...(existing?.subruddits || []),
+										...incoming.subruddits
+									]
 								}
 							}
 						}

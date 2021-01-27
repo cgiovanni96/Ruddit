@@ -1,5 +1,6 @@
 import {
 	Arg,
+	Args,
 	Authorized,
 	Ctx,
 	FieldResolver,
@@ -8,9 +9,12 @@ import {
 	Resolver,
 	Root
 } from 'type-graphql'
+import { getConnection } from 'typeorm'
 import Context from '../../app/server/context'
 import Subruddit from '../../database/entity/Subruddit'
+import PaginatedSubrudditsResponse from '../../database/schema/response/PaginatedSubrudditsResponse'
 import CreateSubrudditInputType from './types/CreateSubrudditInputType'
+import SubrudditPaginationArguments from './types/SubrudditPaginationArguments'
 
 @Resolver(Subruddit)
 export default class SubrudditResolver {
@@ -19,8 +23,31 @@ export default class SubrudditResolver {
 		return loaders.userLoader.load(subruddit.adminId)
 	}
 
+	@Query(() => PaginatedSubrudditsResponse)
+	async subruddits(
+		@Args() { cursor, limit }: SubrudditPaginationArguments
+	): Promise<PaginatedSubrudditsResponse> {
+		const setLimit = Math.min(50, limit)
+		const limitPlusOne = limit + 1
+
+		const cursorDate = cursor ? new Date(parseInt(cursor)) : null
+		const qb = await getConnection()
+			.getRepository(Subruddit)
+			.createQueryBuilder('s')
+
+		if (cursor) qb.where('s.createdAt < :cursorDate', { cursorDate })
+		qb.orderBy('s.createdAt', 'DESC')
+		qb.limit(limitPlusOne)
+		const subruddits = await qb.getMany()
+
+		return {
+			subruddits: subruddits.slice(0, setLimit),
+			hasMore: subruddits.length === limitPlusOne
+		}
+	}
+
 	@Query(() => [Subruddit])
-	async subruddits() {
+	async easySubruddits(): Promise<Subruddit[]> {
 		return Subruddit.find()
 	}
 

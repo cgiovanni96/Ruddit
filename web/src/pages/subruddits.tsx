@@ -1,11 +1,21 @@
-import { Box, Flex, Heading, Spacer, Text } from '@chakra-ui/react'
-import React, { Fragment } from 'react'
+import {
+	Box,
+	Button,
+	Center,
+	Flex,
+	Heading,
+	Stack,
+	Text
+} from '@chakra-ui/react'
+import React from 'react'
 import Layout from '../components/Layout'
 import { useSubrudditsQuery } from '../generated/graphql'
 import { withApollo } from '../lib/apollo/withApollo'
 
 const Subruddits: React.FC = ({}) => {
-	const { loading, error, data } = useSubrudditsQuery()
+	const { loading, error, data, fetchMore, variables } = useSubrudditsQuery({
+		variables: { limit: 4, cursor: null }
+	})
 
 	if (loading) {
 		return <div> Loading </div>
@@ -15,27 +25,52 @@ const Subruddits: React.FC = ({}) => {
 		return <div> Error... </div>
 	}
 
+	const fetchMoreSubruddits = () => {
+		fetchMore({
+			variables: {
+				limit: variables?.limit,
+				cursor:
+					data?.subruddits.subruddits[data.subruddits.subruddits.length - 1]
+						.createdAt
+			}
+		})
+	}
+
 	return (
 		<Layout>
-			{data.subruddits.map((sub) => {
-				return (
-					<Fragment key={sub.id}>
-						<Box p={8} bgColor={'gray.900'} rounded={'lg'}>
+			<Stack spacing={6}>
+				{data?.subruddits.subruddits.map((s) => {
+					return (
+						<Box
+							key={s.id}
+							flex={1}
+							mt={8}
+							p={4}
+							rounded={'lg'}
+							bgColor={'gray.900'}
+						>
 							<Flex flexDir={'column'}>
-								<Heading as={'h2'}>{sub.name}</Heading>
-								<Box>
-									<Text>
-										<div>{sub.description}</div>
-									</Text>
-								</Box>
+								<Heading as={'h2'}>{s.name}</Heading>
+								<Text>{s.description}</Text>
 							</Flex>
 						</Box>
-						<Spacer mb={6} />
-					</Fragment>
-				)
-			})}
+					)
+				})}
+			</Stack>
+			{data && data.subruddits.hasMore ? (
+				<Center mt={4}>
+					<Button
+						onClick={fetchMoreSubruddits}
+						isLoading={loading}
+						bgColor={'blue.400'}
+						colorScheme={'blue'}
+					>
+						More
+					</Button>
+				</Center>
+			) : null}
 		</Layout>
 	)
 }
 
-export default withApollo({ ssr: false })(Subruddits)
+export default withApollo({ ssr: true })(Subruddits)

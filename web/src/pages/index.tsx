@@ -1,4 +1,3 @@
-import { useApolloClient } from '@apollo/client'
 import {
 	Box,
 	Button,
@@ -17,10 +16,6 @@ import { usePostsQuery, useMeQuery } from '../generated/graphql'
 import { withApollo } from '../lib/apollo/withApollo'
 
 const Index: React.FC = () => {
-	const apolloClient = useApolloClient()
-
-	console.log('Cache', apolloClient.cache)
-
 	const { data, loading, fetchMore, variables } = usePostsQuery({
 		variables: {
 			limit: 2,
@@ -33,7 +28,6 @@ const Index: React.FC = () => {
 	const { data: meData } = useMeQuery()
 
 	if (!data || !data.posts) {
-		console.log('Hello')
 		return <div>Error</div>
 	}
 
@@ -53,9 +47,14 @@ const Index: React.FC = () => {
 				<Heading as={'h2'} color={'white'}>
 					Welcome
 				</Heading>
-				<RouterLink href="/create-post">
-					<Link ml={'auto'}>Add Post</Link>
-				</RouterLink>
+				<Box ml={'auto'}>
+					<RouterLink href="/subruddits">
+						<Link>Subruddits List</Link>
+					</RouterLink>
+					<RouterLink href="/create-post">
+						<Link ml={8}>Add Post</Link>
+					</RouterLink>
+				</Box>
 			</Flex>
 			<Stack spacing={6}>
 				{data?.posts.posts.map((p) => {

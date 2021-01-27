@@ -2,4 +2,5 @@ fragment SubrudditFields on Subruddit {
 	id
 	name
 	description
+	createdAt
 }

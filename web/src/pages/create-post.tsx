@@ -6,7 +6,10 @@ import Editor from '../components/Editor/Editor'
 import Field from '../components/Field'
 import Layout from '../components/Layout'
 import SelectSubruddits from '../components/SelectSubruddits'
-import { useCreatePostMutation, useSubrudditsQuery } from '../generated/graphql'
+import {
+	useCreatePostMutation,
+	useSubrudditsListQuery
+} from '../generated/graphql'
 import { withApollo } from '../lib/apollo/withApollo'
 import useIsAuthorized from '../lib/hook/useIsAuthorized'
 
@@ -17,7 +20,7 @@ interface CreatePostProps {
 const CreatePost: React.FC<CreatePostProps> = ({ subruddit }) => {
 	const [createPost] = useCreatePostMutation()
 	const router = useRouter()
-	const { error, loading, data } = useSubrudditsQuery()
+	const { error, loading, data } = useSubrudditsListQuery()
 	const [postText, setPostText] = useState('')
 	useIsAuthorized()
 
@@ -28,7 +31,7 @@ const CreatePost: React.FC<CreatePostProps> = ({ subruddit }) => {
 		return <div>Loading</div>
 	}
 
-	if (!data.subruddits) {
+	if (!data.easySubruddits) {
 		return <div>Subruddits not found</div>
 	}
 
@@ -56,7 +59,10 @@ const CreatePost: React.FC<CreatePostProps> = ({ subruddit }) => {
 					<Form>
 						<Field name="title" placeholder="Title" label="Title" />
 						<Spacer mt={6} />
-						<SelectSubruddits name="subruddit" subruddits={data.subruddits} />
+						<SelectSubruddits
+							name="subruddit"
+							subruddits={data.easySubruddits}
+						/>
 						<Spacer mt={6} />
 						<Editor value={postText} setValue={setPostText} />
 						<Spacer mt={6} />

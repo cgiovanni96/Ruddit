@@ -1,4 +1,5 @@
 import { Box, Button, Center, Flex, Heading, Stack } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import React from 'react'
 import Layout from '../../components/Layout'
 import Post from '../../components/Post/Post'
@@ -10,19 +11,25 @@ import {
 	useSubrudditQuery
 } from '../../generated/graphql'
 import { withApollo } from '../../lib/apollo/withApollo'
-import useGetSlug from '../../lib/hook/useGetSlug'
+import subruddits from '../subruddits'
+// import useGetSlug from '../../lib/hook/useGetSlug'
 
 const Sub: React.FC = ({}) => {
-	const slug = useGetSlug()
-	const { error: subrudditError, data: subrudditData } = useSubrudditQuery({
-		variables: { slug }
-	})
+	// const slug = useGetSlug()
+
+	const router = useRouter()
+	const slug: string =
+		typeof router.query.slug === 'string' ? router.query.slug : ''
 	const { data: meData } = useMeQuery()
 
-	if (subrudditError || !subrudditData || !subrudditData.subruddit || !meData) {
-		return <div>Error...</div>
-	}
-
+	const {
+		loading: subrudditLoading,
+		error: subrudditError,
+		data: subrudditData
+	} = useSubrudditQuery({
+		variables: { slug }
+	})
+	// if (subrudditLoading) return <div>Loading...</div>
 	const {
 		loading: postLoading,
 		error: postError,
@@ -33,9 +40,12 @@ const Sub: React.FC = ({}) => {
 		variables: {
 			limit: 10,
 			cursor: null,
-			subrudditId: subrudditData.subruddit.id
+			subrudditId: subrudditData?.subruddit.id
 		}
 	})
+	if (subrudditError || !subrudditData || !subrudditData.subruddit || !meData) {
+		return <div>Error...</div>
+	}
 
 	const fetchMorePosts = () => {
 		fetchMore({

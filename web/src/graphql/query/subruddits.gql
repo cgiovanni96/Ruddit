@@ -1,5 +1,8 @@
-query Subruddits {
-	subruddits {
-		...SubrudditFields
+query Subruddits($limit: Int!, $cursor: String) {
+	subruddits(limit: $limit, cursor: $cursor) {
+		subruddits {
+			...SubrudditFields
+		}
+		hasMore
 	}
 }

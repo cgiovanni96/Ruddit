@@ -67,6 +67,9 @@ const Navbar: React.FC = ({}) => {
 					<Link
 						onClick={() => {
 							apolloClient.resetStore()
+							apolloClient.cache.evict({ fieldName: 'subruddits:{}' })
+							apolloClient.clearStore()
+							apolloClient.cache.reset()
 							apolloClient.cache.gc()
 						}}
 					>
