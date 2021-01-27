@@ -31,6 +31,7 @@ export default class Comment extends BaseEntity {
 	post: Post
 
 	@Column('text')
+	@Field()
 	text: string
 
 	@CreateDateColumn()

@@ -42,7 +42,7 @@ export default class Post extends BaseEntity {
 	authorId: string
 
 	@ManyToOne(() => User)
-	@Field()
+	@Field(() => User)
 	author: User
 
 	@Column()
@@ -50,7 +50,7 @@ export default class Post extends BaseEntity {
 	subrudditId: string
 
 	@ManyToOne(() => Subruddit)
-	@Field()
+	@Field(() => Subruddit)
 	subruddit: Subruddit
 
 	@OneToMany(() => Vote, (vote) => vote.post)

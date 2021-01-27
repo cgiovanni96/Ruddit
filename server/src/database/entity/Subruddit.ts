@@ -37,7 +37,7 @@ export default class Subruddit extends BaseEntity {
 	adminId: string
 
 	@ManyToOne(() => User, (user) => user.id)
-	@Field()
+	@Field(() => User)
 	admin: User
 
 	@OneToMany(() => Post, (post) => post.subrudditId)
