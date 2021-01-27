@@ -3,6 +3,7 @@ import { Form, Formik } from 'formik'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import Editor from '../../../components/Editor/Editor'
+import Error from '../../../components/Error'
 import Field from '../../../components/Field'
 import Layout from '../../../components/Layout'
 import Loading from '../../../components/Loading'
@@ -20,7 +21,7 @@ const EditPost: React.FC = ({}) => {
 	const [postText, setPostText] = useState(data?.post?.text || '')
 
 	if (error || !data) {
-		return <div>Error</div>
+		return <Error />
 	}
 
 	if (loading) {
@@ -28,7 +29,7 @@ const EditPost: React.FC = ({}) => {
 	}
 
 	if (!data.post) {
-		return <div> no post found </div>
+		return <Error text={'Post not found'} />
 	}
 
 	return (

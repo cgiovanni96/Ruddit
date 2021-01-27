@@ -8,6 +8,7 @@ import {
 	Text
 } from '@chakra-ui/react'
 import React from 'react'
+import Error from '../components/Error'
 import Layout from '../components/Layout'
 import Loading from '../components/Loading'
 import { useSubrudditsQuery } from '../generated/graphql'
@@ -23,7 +24,7 @@ const Subruddits: React.FC = ({}) => {
 	}
 
 	if (error || !data || !data.subruddits) {
-		return <div> Error... </div>
+		return <Error />
 	}
 
 	const fetchMoreSubruddits = () => {

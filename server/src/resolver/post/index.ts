@@ -62,14 +62,11 @@ export default class PostResolver {
 			const subruddit = await Subruddit.findOne({
 				where: { slug: subrudditSlug }
 			})
-			console.log('slug', subrudditSlug)
-			console.log('find subruddit', subruddit?.name)
 			if (subruddit)
 				qb.where('p.subrudditId = :subrudditId', { subrudditId: subruddit.id })
 		}
 
 		if (cursor) {
-			console.log('there is a cursor')
 			if (flag) qb.andWhere('p.createdAt < :cursorDate', { cursorDate })
 			else qb.where('p.createdAt < :cursorDate', { cursorDate })
 		}
@@ -78,7 +75,6 @@ export default class PostResolver {
 		qb.limit(limitPlusOne)
 		const posts = await qb.getMany()
 
-		console.log('paginated posts', posts.length)
 		const res = {
 			posts: posts.slice(0, setLimit),
 			hasMore: posts.length === limitPlusOne

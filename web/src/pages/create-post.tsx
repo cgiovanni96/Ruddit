@@ -3,6 +3,7 @@ import { Form, Formik } from 'formik'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import Editor from '../components/Editor/Editor'
+import Error from '../components/Error'
 import Field from '../components/Field'
 import Layout from '../components/Layout'
 import Loading from '../components/Loading'
@@ -26,14 +27,14 @@ const CreatePost: React.FC<CreatePostProps> = ({ subruddit }) => {
 	useIsAuthorized()
 
 	if (error || !data) {
-		return <div> Error ...</div>
+		return <Error />
 	}
 	if (loading) {
 		return <Loading />
 	}
 
 	if (!data.easySubruddits) {
-		return <div>Subruddits not found</div>
+		return <Error text={'Subruddits not found'} />
 	}
 
 	return (

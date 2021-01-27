@@ -1,5 +1,6 @@
 import { Box, Button, Center, Flex, Heading, Stack } from '@chakra-ui/react'
 import React from 'react'
+import Error from '../../components/Error'
 import Layout from '../../components/Layout'
 import Loading from '../../components/Loading'
 import Post from '../../components/Post/Post'
@@ -26,7 +27,7 @@ const Sub: React.FC = ({}) => {
 	}
 
 	if (query.error || !query.data || !meData) {
-		return <div>Error data ...</div>
+		return <Error />
 	}
 
 	const subruddit = query.data.posts.posts[0].subruddit

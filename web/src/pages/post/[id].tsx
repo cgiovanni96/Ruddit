@@ -1,5 +1,6 @@
 import { Box, Flex, Heading } from '@chakra-ui/react'
 import React from 'react'
+import Error from '../../components/Error'
 import Layout from '../../components/Layout'
 import Loading from '../../components/Loading'
 import TextMd from '../../components/TextMd'
@@ -12,7 +13,7 @@ const Post: React.FC = ({}) => {
 	const { error, loading, data } = usePostQuery({ variables: { id } })
 
 	if (error || !data) {
-		return <div>Error</div>
+		return <Error />
 	}
 
 	if (loading) {
@@ -20,7 +21,7 @@ const Post: React.FC = ({}) => {
 	}
 
 	if (!data.post) {
-		return <div> post not found</div>
+		return <Error text={'Post not found'} />
 	}
 
 	return (

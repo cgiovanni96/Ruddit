@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react'
 import RouterLink from 'next/link'
 import React from 'react'
+import Error from '../components/Error'
 import Layout from '../components/Layout'
 import Post from '../components/Post/Post'
 import Vote from '../components/Post/Vote'
@@ -28,7 +29,7 @@ const Index: React.FC = () => {
 	const { data: meData } = useMeQuery()
 
 	if (!data || !data.posts) {
-		return <div>Error</div>
+		return <Error />
 	}
 
 	const fetchMorePosts = () => {
