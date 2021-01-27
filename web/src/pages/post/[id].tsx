@@ -1,6 +1,7 @@
 import { Box, Flex, Heading } from '@chakra-ui/react'
 import React from 'react'
 import Layout from '../../components/Layout'
+import Loading from '../../components/Loading'
 import TextMd from '../../components/TextMd'
 import { usePostQuery } from '../../generated/graphql'
 import { withApollo } from '../../lib/apollo/withApollo'
@@ -15,7 +16,7 @@ const Post: React.FC = ({}) => {
 	}
 
 	if (loading) {
-		return <div>Loading</div>
+		return <Loading />
 	}
 
 	if (!data.post) {

@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react'
 import React from 'react'
 import Layout from '../components/Layout'
+import Loading from '../components/Loading'
 import { useSubrudditsQuery } from '../generated/graphql'
 import { withApollo } from '../lib/apollo/withApollo'
 
@@ -18,7 +19,7 @@ const Subruddits: React.FC = ({}) => {
 	})
 
 	if (loading) {
-		return <div> Loading </div>
+		return <Loading />
 	}
 
 	if (error || !data || !data.subruddits) {

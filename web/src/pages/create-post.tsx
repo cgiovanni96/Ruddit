@@ -5,6 +5,7 @@ import React, { useState } from 'react'
 import Editor from '../components/Editor/Editor'
 import Field from '../components/Field'
 import Layout from '../components/Layout'
+import Loading from '../components/Loading'
 import SelectSubruddits from '../components/SelectSubruddits'
 import {
 	useCreatePostMutation,
@@ -28,7 +29,7 @@ const CreatePost: React.FC<CreatePostProps> = ({ subruddit }) => {
 		return <div> Error ...</div>
 	}
 	if (loading) {
-		return <div>Loading</div>
+		return <Loading />
 	}
 
 	if (!data.easySubruddits) {

@@ -1,7 +1,7 @@
 import { Box, Button, Center, Flex, Heading, Stack } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
 import React from 'react'
 import Layout from '../../components/Layout'
+import Loading from '../../components/Loading'
 import Post from '../../components/Post/Post'
 import Vote from '../../components/Post/Vote'
 import TextMd from '../../components/TextMd'
@@ -21,15 +21,11 @@ const Sub: React.FC = ({}) => {
 		}
 	})
 
-	if (!meData) {
-		return <div>Error...</div>
-	}
-
 	if (query.loading) {
-		return <div>Loading...</div>
+		return <Loading />
 	}
 
-	if (query.error || !query.data) {
+	if (query.error || !query.data || !meData) {
 		return <div>Error data ...</div>
 	}
 
