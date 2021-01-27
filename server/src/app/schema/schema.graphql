@@ -3,6 +3,16 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type Comment {
+  createdAt: DateTime!
+  post: Post!
+  postId: String!
+  updatedAt: DateTime!
+  user: User!
+  userId: String!
+  value: Int!
+}
+
 input CreatePostInputType {
   subrudditId: String = "407f980e-db50-4354-9c30-03dbf96c3da4"
   text: String!
@@ -70,6 +80,7 @@ type Post {
 }
 
 type Query {
+  easyComments: [Comment!]!
   easyPosts: [Post!]!
   easySubruddits: [Subruddit!]!
   hello: String!

@@ -13,6 +13,7 @@ import User from './User'
 import truncateString from '../../app/util/truncateString'
 import Vote from './Vote'
 import Subruddit from './Subruddit'
+import Comment from './Comment'
 
 @Entity()
 @ObjectType()
@@ -54,6 +55,9 @@ export default class Post extends BaseEntity {
 
 	@OneToMany(() => Vote, (vote) => vote.post)
 	votes: Vote[]
+
+	@OneToMany(() => Comment, (comment) => comment.post)
+	comments: Comment[]
 
 	@Field(() => String)
 	textSnippet(): string {

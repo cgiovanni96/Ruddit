@@ -12,6 +12,7 @@ import { Field, ObjectType } from 'type-graphql'
 import argon2 from 'argon2'
 import Post from './Post'
 import Vote from './Vote'
+import Comment from './Comment'
 
 @Entity()
 @ObjectType()
@@ -35,7 +36,10 @@ export default class User extends BaseEntity {
 	posts: Post[]
 
 	@OneToMany(() => Vote, (vote) => vote.user)
-	votes: Vote
+	votes: Vote[]
+
+	@OneToMany(() => Comment, (comment) => comment.user)
+	comments: Comment[]
 
 	@CreateDateColumn()
 	@Field()
