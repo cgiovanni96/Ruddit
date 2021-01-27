@@ -7,7 +7,7 @@ import {
 	PrimaryColumn,
 	UpdateDateColumn
 } from 'typeorm'
-import { Field, Int, ObjectType } from 'type-graphql'
+import { Field, ObjectType } from 'type-graphql'
 import User from './User'
 import Post from './Post'
 
@@ -30,9 +30,8 @@ export default class Comment extends BaseEntity {
 	@Field(() => Post)
 	post: Post
 
-	@Column('int')
-	@Field(() => Int)
-	value: number
+	@Column('text')
+	text: string
 
 	@CreateDateColumn()
 	@Field()

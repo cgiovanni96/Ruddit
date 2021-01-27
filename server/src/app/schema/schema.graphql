@@ -10,7 +10,11 @@ type Comment {
   updatedAt: DateTime!
   user: User!
   userId: String!
-  value: Int!
+}
+
+input CreateCommentInputType {
+  postId: String!
+  text: String!
 }
 
 input CreatePostInputType {
@@ -43,6 +47,7 @@ input LoginInputType {
 
 type Mutation {
   changePassword(newPassword: String!, token: String!): UserResponse!
+  createComment(data: CreateCommentInputType!): Comment
   createPost(data: CreatePostInputType!): Post
   createSubruddit(data: CreateSubrudditInputType!): Subruddit
   deletePost(id: String!): Boolean!
