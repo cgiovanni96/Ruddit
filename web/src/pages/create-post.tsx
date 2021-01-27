@@ -15,11 +15,7 @@ import {
 import { withApollo } from '../lib/apollo/withApollo'
 import useIsAuthorized from '../lib/hook/useIsAuthorized'
 
-interface CreatePostProps {
-	subruddit?: string
-}
-
-const CreatePost: React.FC<CreatePostProps> = ({ subruddit }) => {
+const CreatePost: React.FC = ({}) => {
 	const [createPost] = useCreatePostMutation()
 	const router = useRouter()
 	const { error, loading, data } = useSubrudditsListQuery()
