@@ -36,7 +36,7 @@ export default class PostResolver {
 
 	@FieldResolver(() => Comment, { nullable: true })
 	comments(@Root() post: Post, @Ctx() { loaders }: Context) {
-		return loaders.commentByPostIdsLoader.load(post.id)
+		return loaders.commentLoader.byPostIds.load(post.id)
 	}
 
 	@FieldResolver(() => Int, { nullable: true })
