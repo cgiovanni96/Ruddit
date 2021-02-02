@@ -4,7 +4,7 @@ import {
 	CreateDateColumn,
 	Entity,
 	ManyToOne,
-	PrimaryColumn,
+	PrimaryGeneratedColumn,
 	UpdateDateColumn
 } from 'typeorm'
 import { Field, ObjectType } from 'type-graphql'
@@ -14,7 +14,11 @@ import Post from './Post'
 @Entity()
 @ObjectType()
 export default class Comment extends BaseEntity {
-	@PrimaryColumn()
+	@PrimaryGeneratedColumn('uuid')
+	@Field()
+	id: string
+
+	@Column()
 	@Field()
 	userId: string
 
@@ -22,7 +26,7 @@ export default class Comment extends BaseEntity {
 	@Field(() => User)
 	user: User
 
-	@PrimaryColumn()
+	@Column()
 	@Field()
 	postId: string
 

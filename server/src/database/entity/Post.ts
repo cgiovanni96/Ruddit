@@ -56,8 +56,8 @@ export default class Post extends BaseEntity {
 	@OneToMany(() => Vote, (vote) => vote.post)
 	votes: Vote[]
 
-	@OneToMany(() => Comment, (comment) => comment.post)
-	comments: Comment[]
+	@OneToMany(() => Comment, (comment) => comment.post, { nullable: true })
+	comments?: Comment[]
 
 	@Field(() => String)
 	textSnippet(): string {

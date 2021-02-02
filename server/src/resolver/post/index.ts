@@ -13,6 +13,7 @@ import {
 } from 'type-graphql'
 import { getConnection } from 'typeorm'
 import Context from '../../app/server/context'
+import Comment from '../../database/entity/Comment'
 import Post from '../../database/entity/Post'
 import Subruddit from '../../database/entity/Subruddit'
 import User from '../../database/entity/User'
@@ -28,10 +29,14 @@ export default class PostResolver {
 	author(@Root() post: Post, @Ctx() { loaders }: Context) {
 		return loaders.userLoader.load(post.authorId)
 	}
-
 	@FieldResolver(() => Subruddit)
 	subruddit(@Root() post: Post, @Ctx() { loaders }: Context) {
 		return loaders.subrudditLoader.load(post.subrudditId)
+	}
+
+	@FieldResolver(() => Comment, { nullable: true })
+	comments(@Root() post: Post, @Ctx() { loaders }: Context) {
+		return loaders.commentByPostIdsLoader.load(post.id)
 	}
 
 	@FieldResolver(() => Int, { nullable: true })
@@ -85,7 +90,7 @@ export default class PostResolver {
 
 	@Query(() => [Post])
 	async easyPosts(): Promise<Post[]> {
-		return Post.find()
+		return Post.find({ take: 5 })
 	}
 
 	@Query(() => Post, { nullable: true })

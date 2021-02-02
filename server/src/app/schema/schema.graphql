@@ -5,6 +5,7 @@
 
 type Comment {
   createdAt: DateTime!
+  id: String!
   post: Post!
   postId: String!
   text: String!
@@ -73,6 +74,7 @@ type PaginatedSubrudditsResponse {
 type Post {
   author: User!
   authorId: String!
+  comments: Comment
   createdAt: String!
   id: String!
   points: Float!
