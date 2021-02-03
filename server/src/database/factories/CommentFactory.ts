@@ -10,7 +10,6 @@ define(Comment, (
 	faker: typeof Faker,
 	context?: { authorsIds: string[]; postsIds: string[] }
 ) => {
-	console.log('CommentFactory')
 	const text = faker.lorem.paragraphs(2)
 
 	const comment = new Comment()

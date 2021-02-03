@@ -4,7 +4,6 @@ import log from '../../app/util/log'
 import User from '../entity/User'
 
 define(User, (faker: typeof Faker) => {
-	// console.log('User Factory')
 	const name = faker.internet.userName()
 	const email = faker.internet.email(name, '', 'gmail.com')
 	const password = faker.internet.password()

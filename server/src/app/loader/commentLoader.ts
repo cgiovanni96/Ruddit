@@ -1,6 +1,7 @@
 import DataLoader from 'dataloader'
 import { getConnection, In } from 'typeorm'
 import Comment from '../../database/entity/Comment'
+import groupBy from '../util/groupBy'
 
 export type CommentLoader = {
 	byPostIds: ReturnType<typeof byPostIds>
@@ -12,25 +13,19 @@ const byPostIds = () =>
 		const comments: Comment[] = await getConnection()
 			.getRepository(Comment)
 			.find({ postId: In(postIds as string[]) })
-		const commentsArray: Record<string, Comment> = {}
-		comments.forEach((c) => {
-			commentsArray[c.postId] = c
-		})
 
-		return postIds.map((id) => commentsArray[id])
+		const grouped = groupBy(comments, 'postId')
+		return postIds.map((id) => grouped[id])
 	})
 
 const byUserIds = () =>
 	new DataLoader<string, Comment>(async (userIds) => {
 		const comments: Comment[] = await getConnection()
 			.getRepository(Comment)
-			.find({ userId: In(userIds as string[]) })
-		const commentsArray: Record<string, Comment> = {}
-		comments.forEach((c) => {
-			commentsArray[c.postId] = c
-		})
+			.find({ postId: In(userIds as string[]) })
 
-		return userIds.map((id) => commentsArray[id])
+		const grouped = groupBy(comments, 'postId')
+		return userIds.map((id) => grouped[id])
 	})
 
 const commentLoader: CommentLoader = {

@@ -2,7 +2,7 @@ import Context from '../app/server/context'
 import { MiddlewareFn } from 'type-graphql'
 import Post from '../database/entity/Post'
 
-const isAuthorOrAdmin: MiddlewareFn<Context> = async (
+const isPostAuthorOrAdmin: MiddlewareFn<Context> = async (
 	{ args, context },
 	next
 ) => {
@@ -17,4 +17,4 @@ const isAuthorOrAdmin: MiddlewareFn<Context> = async (
 	return next()
 }
 
-export default isAuthorOrAdmin
+export default isPostAuthorOrAdmin

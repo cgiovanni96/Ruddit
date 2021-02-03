@@ -52,11 +52,13 @@ type Mutation {
   createComment(data: CreateCommentInputType!): Comment
   createPost(data: CreatePostInputType!): Post
   createSubruddit(data: CreateSubrudditInputType!): Subruddit
+  deleteComment(id: String!, subrudditId: String!): Boolean!
   deletePost(id: String!): Boolean!
   forgotPassword(email: String!): Boolean!
   login(data: LoginInputType!): UserResponse!
   logout: Boolean!
   register(data: UserInputType!): UserResponse!
+  updateComment(id: String!, subrudditId: String!, text: String!): Post
   updatePost(data: UpdatePostInputType!, id: String!): Post
   vote(postId: String!, value: Int!): Boolean!
 }
@@ -74,7 +76,7 @@ type PaginatedSubrudditsResponse {
 type Post {
   author: User!
   authorId: String!
-  comments: Comment
+  comments: [Comment!]
   createdAt: String!
   id: String!
   points: Float!

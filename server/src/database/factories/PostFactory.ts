@@ -10,7 +10,6 @@ define(Post, (
 	faker: typeof Faker,
 	context?: { authorsIds: string[]; subrudditsIds: string[] }
 ) => {
-	console.log('PostFactory')
 	const title = faker.lorem.sentence()
 	const text = faker.lorem.paragraphs(2)
 

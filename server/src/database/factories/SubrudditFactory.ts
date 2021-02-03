@@ -5,7 +5,6 @@ import Subruddit from '../entity/Subruddit'
 import randomUserId from './util/randomUserId'
 
 define(Subruddit, (faker: typeof Faker, context?: { adminsIds: string[] }) => {
-	console.log(console.log(context))
 	const name = faker.lorem.sentence(3, 6)
 	const slug = faker.lorem.slug()
 	const description = faker.lorem.paragraphs(3)

@@ -18,7 +18,7 @@ import Post from '../../database/entity/Post'
 import Subruddit from '../../database/entity/Subruddit'
 import User from '../../database/entity/User'
 import PaginatedPostsResponse from '../../database/schema/response/PaginatedPostsResponse'
-import isAuthorOrAdmin from '../../middleware/isAuthorOrAdmin'
+import isPostAuthorOrAdmin from '../../middleware/isPostAuthorOrAdmin'
 import CreatePostInputType from './types/CreatePostInputType'
 import PostPaginationArguments from './types/PostPaginationArguments'
 import UpdatePostInputType from './types/UpdatePostInputType'
@@ -34,8 +34,8 @@ export default class PostResolver {
 		return loaders.subrudditLoader.load(post.subrudditId)
 	}
 
-	@FieldResolver(() => Comment, { nullable: true })
-	comments(@Root() post: Post, @Ctx() { loaders }: Context) {
+	@FieldResolver(() => [Comment], { nullable: true })
+	async comments(@Root() post: Post, @Ctx() { loaders }: Context) {
 		return loaders.commentLoader.byPostIds.load(post.id)
 	}
 
@@ -121,7 +121,7 @@ export default class PostResolver {
 	}
 
 	@Authorized()
-	@UseMiddleware(isAuthorOrAdmin)
+	@UseMiddleware(isPostAuthorOrAdmin)
 	@Mutation(() => Post, { nullable: true })
 	async updatePost(
 		@Arg('id') id: string,
@@ -139,8 +139,9 @@ export default class PostResolver {
 		return raw[0]
 	}
 
+	@Authorized()
+	@UseMiddleware(isPostAuthorOrAdmin)
 	@Mutation(() => Boolean)
-	@UseMiddleware(isAuthorOrAdmin)
 	async deletePost(@Arg('id') id: string): Promise<boolean> {
 		try {
 			await Post.delete({ id })

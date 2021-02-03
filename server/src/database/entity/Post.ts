@@ -56,7 +56,11 @@ export default class Post extends BaseEntity {
 	@OneToMany(() => Vote, (vote) => vote.post)
 	votes: Vote[]
 
-	@OneToMany(() => Comment, (comment) => comment.post, { nullable: true })
+	@OneToMany(() => Comment, (comment) => comment.post, {
+		nullable: true,
+		onDelete: 'CASCADE',
+		onUpdate: 'CASCADE'
+	})
 	comments?: Comment[]
 
 	@Field(() => String)
