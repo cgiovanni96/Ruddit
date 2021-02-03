@@ -14,6 +14,8 @@ const byPostIds = () =>
 			.getRepository(Comment)
 			.find({ postId: In(postIds as string[]) })
 
+		console.log('--------- COMMENTS ----------\n\n', comments)
+
 		const grouped = groupBy(comments, 'postId')
 		return postIds.map((id) => grouped[id])
 	})

@@ -10,6 +10,7 @@ import {
 } from 'type-graphql'
 import { getConnection } from 'typeorm'
 import Context from '../../app/server/context'
+import { loaders } from '../../app/server/loaders'
 import Comment from '../../database/entity/Comment'
 import Post from '../../database/entity/Post'
 import isCommentAuthorOrAdmin from '../../middleware/isCommentAuthorOrAdmin'
@@ -43,7 +44,8 @@ export default class CommentResolver {
 	@Mutation(() => Post, { nullable: true })
 	async updateComment(
 		@Args() deleteCommentArguments: EditCommentArguments,
-		@Arg('text') text: string
+		@Arg('text') text: string,
+		@Ctx() { loaders }: Context
 	): Promise<Post | undefined> {
 		const { raw } = await getConnection()
 			.createQueryBuilder()
@@ -54,6 +56,8 @@ export default class CommentResolver {
 			})
 			.returning('*')
 			.execute()
+		loaders.commentLoader.byPostIds.clear(raw[0].postId || null)
+		loaders.commentLoader.byUserIds.clear(raw[0].postId || null)
 		return raw[0]
 	}
 
@@ -65,6 +69,8 @@ export default class CommentResolver {
 	): Promise<boolean> {
 		try {
 			await Comment.delete({ id: deleteCommentArguments.id })
+			loaders.commentLoader.byPostIds.clearAll()
+			loaders.commentLoader.byUserIds.clearAll()
 			return true
 		} catch {
 			return false
